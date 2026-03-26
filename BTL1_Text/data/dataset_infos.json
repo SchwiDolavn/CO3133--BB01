@@ -1,0 +1,66 @@
+{
+    "default": {
+        "description": "",
+        "citation": "",
+        "homepage": "",
+        "license": "",
+        "features": {
+            "abstract_id": {
+                "dtype": "string",
+                "id": null,
+                "_type": "Value"
+            },
+            "label": {
+                "dtype": "string",
+                "id": null,
+                "_type": "Value"
+            },
+            "text": {
+                "dtype": "string",
+                "id": null,
+                "_type": "Value"
+            },
+            "sentence_id": {
+                "dtype": "int64",
+                "id": null,
+                "_type": "Value"
+            }
+        },
+        "post_processed": null,
+        "supervised_keys": null,
+        "task_templates": null,
+        "builder_name": "json",
+        "config_name": "armanc--pubmed-rct20k",
+        "version": {
+            "version_str": "0.0.0",
+            "description": null,
+            "major": 0,
+            "minor": 0,
+            "patch": 0
+        },
+        "splits": {
+            "train": {
+                "name": "train",
+                "num_bytes": 33100479,
+                "num_examples": 176642,
+                "dataset_name": "json"
+            },
+            "test": {
+                "name": "test",
+                "num_bytes": 5516320,
+                "num_examples": 29578,
+                "dataset_name": "json"
+            },
+            "validation": {
+                "name": "validation",
+                "num_bytes": 5552080,
+                "num_examples": 29672,
+                "dataset_name": "json"
+            }
+        },
+        "download_size": 54356175,
+        "post_processing_size": null,
+        "dataset_size": 44168879,
+        "size_in_bytes": 98525054
+    }
+}
