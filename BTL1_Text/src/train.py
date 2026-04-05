@@ -34,11 +34,11 @@ def train_pipeline_pytorch(model_type='Transformer_BERT', epochs=3):
         learning_rate=lr,
         
         # 1. GIẢM BATCH SIZE XUỐNG MỘT NỬA
-        per_device_train_batch_size=8, 
-        per_device_eval_batch_size=8,
+        per_device_train_batch_size=16, 
+        per_device_eval_batch_size=16,
         
         # 2. BÙ LẠI BATCH SIZE BẰNG GRADIENT ACCUMULATION (8 x 2 = 16)
-        gradient_accumulation_steps=2,
+        gradient_accumulation_steps=1,
         
         # 3. BẬT CHẾ ĐỘ NÉN BỘ NHỚ (GIẢM 50% RAM GPU & CHẠY NHANH HƠN)
         fp16=True, 
