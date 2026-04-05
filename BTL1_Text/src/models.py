@@ -1,37 +1,66 @@
-from datasets import load_dataset
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
-import tensorflow as tf
-from datasets import load_dataset
-from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import classification_report, confusion_matrix
-from tensorflow.keras.layers import TextVectorization, Embedding, LSTM, Bidirectional, Dense, Dropout
-from tensorflow.keras.models import Sequential
+import torch
+import torch.nn as nn
+from transformers import AutoModelForSequenceClassification
+from transformers.modeling_outputs import SequenceClassifierOutput
 
-def model(model_type, num_classes=0, ):
-    if model_type == 'RNN_LSTM':
-        model_LSTM = Sequential([tf.keras.Input(shape=(1,), dtype=tf.string), text_vectorizer, Embedding(input_dim=MAX_WORDS, output_dim=EMBED_DIM, mask_zero=True), Bidirectional(LSTM(32)), Dense(5, activation='softmax')])
+# 1. Định nghĩa mạng Bi-LSTM bằng PyTorch
+class BiLSTM_Model(nn.Module):
+    def __init__(self, vocab_size, embed_dim=128, hidden_dim=32, num_classes=5, dropout=0.5):
+        super(BiLSTM_Model, self).__init__()
+        # Lớp Embedding (thay thế cho lớp Embedding của Keras)
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=0)
+        # Lớp Bi-LSTM
+        self.lstm = nn.LSTM(embed_dim, hidden_dim, batch_first=True, bidirectional=True)
+        # Dropout chống Overfitting
+        self.dropout = nn.Dropout(dropout)
+        # Lớp Dense cuối cùng (Linear trong PyTorch)
+        self.fc = nn.Linear(hidden_dim * 2, num_classes)
 
-        model_LSTM.compile(loss='sparse_categorical_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-
-        model_LSTM.summary()
-    elif model_type == 'Transformer':
-        pass
-    elif model_type == '':
-        pass
-
-class EnsembleModel(nn.Module):
-    """Kết hợp dự đoán của 2 mô hình bằng cách lấy trung bình cộng logits"""
-    def __init__(self, modelA, modelB):
-        super(EnsembleModel, self).__init__()
-        self.modelA = modelA
-        self.modelB = modelB
+    def forward(self, input_ids, attention_mask=None, labels=None, **kwargs):
+        # 1. Đưa text qua lớp Embedding
+        embedded = self.embedding(input_ids)
         
-    def forward(self, x):
-        outA = self.modelA(x)
-        outB = self.modelB(x)
-        return (outA + outB) / 2.0
+        # 2. Đưa qua Bi-LSTM
+        lstm_out, _ = self.lstm(embedded)
+        
+        # 3. Lấy trung bình các từ trong câu (Mean Pooling dựa trên mask)
+        if attention_mask is not None:
+            mask_expanded = attention_mask.unsqueeze(-1).expand(lstm_out.size()).float()
+            sum_embeddings = torch.sum(lstm_out * mask_expanded, 1)
+            sum_mask = torch.clamp(mask_expanded.sum(1), min=1e-9)
+            pooled = sum_embeddings / sum_mask
+        else:
+            pooled = torch.mean(lstm_out, dim=1)
+
+        # 4. Dropout và phân loại
+        pooled = self.dropout(pooled)
+        logits = self.fc(pooled)
+
+        # 5. Tự động tính Loss nếu có truyền nhãn (Để dùng được Trainer API)
+        loss = None
+        if labels is not None:
+            loss_fct = nn.CrossEntropyLoss()
+            loss = loss_fct(logits, labels)
+
+        # Trả về format chuẩn của Hugging Face
+        return SequenceClassifierOutput(loss=loss, logits=logits)
+
+# 2. Hàm gọi mô hình (Gom cả 2 vào đây)
+def build_model_pytorch(model_type, num_classes, vocab_size=None):
+    if model_type == 'Transformer_BERT':
+        print("🤖 Đang tải mô hình Transformer BERT...")
+        model = AutoModelForSequenceClassification.from_pretrained(
+            "bert-base-uncased", 
+            num_labels=num_classes
+        )
+        return model
+        
+    elif model_type == 'RNN_Bi-LSTM':
+        print("🧠 Đang khởi tạo mạng RNN Bi-LSTM...")
+        if vocab_size is None:
+            raise ValueError("Cần truyền vocab_size (kích thước từ điển) cho Bi-LSTM.")
+        model = BiLSTM_Model(vocab_size=vocab_size, num_classes=num_classes)
+        return model
+        
+    else:
+        raise ValueError(f"Không hỗ trợ mô hình: {model_type}")
