@@ -3,23 +3,34 @@ import seaborn as sns
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
 import pandas as pd
+import os
 
-def plot_training_history(history):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-    
-    ax1.plot(history.history['loss'], label='Train Loss')
-    ax1.plot(history.history['val_loss'], label='Val Loss')
+def plot_training_history(log_history, scenario_name):
+    train_epochs = [entry['epoch'] for entry in log_history if 'loss' in entry]
+    train_loss = [entry['loss'] for entry in log_history if 'loss' in entry]
+    val_epochs = [entry['epoch'] for entry in log_history if 'eval_loss' in entry]
+    val_loss = [entry['eval_loss'] for entry in log_history if 'eval_loss' in entry]
+    val_acc_epochs = [entry['epoch'] for entry in log_history if 'eval_accuracy' in entry]
+    val_acc = [entry['eval_accuracy'] for entry in log_history if 'eval_accuracy' in entry]
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
+    if train_loss: ax1.plot(train_epochs, train_loss, label='Train Loss', marker='o')
+    if val_loss: ax1.plot(val_epochs, val_loss, label='Val Loss', marker='s')
     ax1.set_title('Biểu đồ Loss')
+    ax1.set_xlabel('Epoch')
     ax1.legend()
+    if val_acc:
+        ax2.plot(val_acc_epochs, val_acc, label='Val Accuracy', color='green', marker='^')
+        ax2.set_title('Biểu đồ Accuracy')
+        ax2.set_xlabel('Epoch')
+        ax2.legend()
     
-    ax2.plot(history.history['accuracy'], label='Train Accuracy')
-    ax2.plot(history.history['val_accuracy'], label='Val Accuracy')
-    ax2.set_title('Biểu đồ Accuracy')
-    ax2.legend()
-    
-    plt.show()
+    plt.tight_layout()
+    # Lưu biểu đồ với tên kịch bản
+    plt.savefig(f'../result/{scenario_name}_training_history.png')
+    plt.close()
 
-def evaluate_model(y_true, y_pred, classes):
+def evaluate_model(y_true, y_pred, classes, scenario_name):
     print("Classification Report:\n")
     print(classification_report(y_true, y_pred, target_names=classes))
     
@@ -28,23 +39,17 @@ def evaluate_model(y_true, y_pred, classes):
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=classes, yticklabels=classes)
     plt.xlabel('Dự đoán')
     plt.ylabel('Thực tế')
-    plt.title('Confusion Matrix')
-    plt.show()
+    plt.title(f'Confusion Matrix - {scenario_name}')
+    
+    # Lưu Confusion Matrix với tên kịch bản
+    plt.savefig(f'../result/{scenario_name}_confusion_matrix.png')
+    plt.close()
 
-def error_analysis(texts, y_true, y_pred_probs, label_encoder, top_n=5):
-    """
-    Trích xuất các câu dự đoán sai nhưng mô hình lại có độ tự tin rất cao.
-    texts: List các câu (string)
-    y_true: Nhãn thực tế (số nguyên)
-    y_pred_probs: Xác suất dự đoán từ model.predict()
-    """
+def error_analysis(texts, y_true, y_pred_probs, label_encoder, scenario_name, top_n=5):
     y_pred_classes = np.argmax(y_pred_probs, axis=1)
     confidences = np.max(y_pred_probs, axis=1)
-    
-    # Tìm các vị trí dự đoán sai
     errors_idx = np.where(y_pred_classes != y_true)[0]
     
-    # Tạo DataFrame để phân tích
     error_data = []
     for idx in errors_idx:
         error_data.append({
@@ -55,22 +60,15 @@ def error_analysis(texts, y_true, y_pred_probs, label_encoder, top_n=5):
         })
         
     df_errors = pd.DataFrame(error_data)
-    
-    # Sắp xếp theo độ tự tin giảm dần (Sai nhưng "cãi cố")
     df_errors = df_errors.sort_values(by='Confidence', ascending=False)
     
-    print(f"\n--- PHÂN TÍCH LỖI (TOP {top_n} CÂU DỰ ĐOÁN SAI VỚI ĐỘ TỰ TIN CAO NHẤT) ---")
-    for i, row in df_errors.head(top_n).iterrows():
-        print(f"\n[Confidence: {row['Confidence']:.4f}]")
-        print(f"Thực tế: {row['True_Label']} | Dự đoán: {row['Predicted_Label']}")
-        print(f"Văn bản: {row['Text'][:200]}...") # In 200 ký tự đầu
-        
-    # Lưu file CSV để làm báo cáo
-    df_errors.to_csv('../result/error_analysis.csv', index=False)
-    print("\nĐã xuất toàn bộ phân tích lỗi ra ../result/error_analysis.csv")
+    # Xuất file CSV phân tích lỗi
+    file_path = f'../result/{scenario_name}_error_analysis.csv'
+    df_errors.to_csv(file_path, index=False)
+    print(f"\n✅ Đã xuất toàn bộ phân tích lỗi ra {file_path}")
 
 def export_results_to_csv(y_true, y_pred, classes, model_name):
-    """Xuất báo cáo chi tiết ra file CSV để làm bảng biểu"""
+    """Hàm bị mất đã được khôi phục: Xuất báo cáo chi tiết ra file CSV"""
     report = classification_report(y_true, y_pred, target_names=classes, output_dict=True)
     df_report = pd.DataFrame(report).transpose()
     

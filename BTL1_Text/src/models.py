@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from transformers import AutoModelForSequenceClassification
 from transformers.modeling_outputs import SequenceClassifierOutput
+from losses import focal_loss_pytorch
 
 # 1. Định nghĩa mạng Bi-LSTM bằng PyTorch
 class BiLSTM_Model(nn.Module):
@@ -16,7 +17,7 @@ class BiLSTM_Model(nn.Module):
         # Lớp Dense cuối cùng (Linear trong PyTorch)
         self.fc = nn.Linear(hidden_dim * 2, num_classes)
 
-    def forward(self, input_ids, attention_mask=None, labels=None, **kwargs):
+    def forward(self, input_ids, attention_mask=None, labels=None, loss_type='cross_entropy', **kwargs):
         # 1. Đưa text qua lớp Embedding
         embedded = self.embedding(input_ids)
         
@@ -38,7 +39,12 @@ class BiLSTM_Model(nn.Module):
 
         # 5. Tự động tính Loss nếu có truyền nhãn (Để dùng được Trainer API)
         loss = None
-        if labels is not None:
+        if loss_type == 'focal':
+            # Sử dụng Focal Loss (đã chuyển sang PyTorch)
+            loss_fct = focal_loss_pytorch(gamma=2.0, alpha=0.25)
+            loss = loss_fct(logits, labels)
+        else:
+            # Sử dụng mặc định
             loss_fct = nn.CrossEntropyLoss()
             loss = loss_fct(logits, labels)
 
@@ -48,15 +54,23 @@ class BiLSTM_Model(nn.Module):
 # 2. Hàm gọi mô hình (Gom cả 2 vào đây)
 def build_model_pytorch(model_type, num_classes, vocab_size=None):
     if model_type == 'Transformer_BERT':
-        print("🤖 Đang tải mô hình Transformer BERT...")
+        print("Đang tải mô hình Transformer BERT...")
         model = AutoModelForSequenceClassification.from_pretrained(
             "bert-base-uncased", 
             num_labels=num_classes
         )
         return model
+    
+    elif model_type == 'Transformer_DistilBERT':
+        print("Đang tải mô hình Transformer DistilBERT (Small)...")
+        model = AutoModelForSequenceClassification.from_pretrained(
+            "distilbert-base-uncased", 
+            num_labels=num_classes
+        )
+        return model
         
     elif model_type == 'RNN_Bi-LSTM':
-        print("🧠 Đang khởi tạo mạng RNN Bi-LSTM...")
+        print("Đang khởi tạo mạng RNN Bi-LSTM...")
         if vocab_size is None:
             raise ValueError("Cần truyền vocab_size (kích thước từ điển) cho Bi-LSTM.")
         model = BiLSTM_Model(vocab_size=vocab_size, num_classes=num_classes)
