@@ -72,7 +72,6 @@ def train_pipeline_pytorch(scenario_name, model_type='Transformer_BERT', epochs=
     lr = 2e-5 if 'Transformer' in model_type else 1e-3
     training_args = TrainingArguments(
         output_dir=f"../result/checkpoints_{scenario_name}",
-        overwrite_output_dir=True,
         eval_strategy="epoch",
         save_strategy="epoch",
         learning_rate=lr,
@@ -83,7 +82,7 @@ def train_pipeline_pytorch(scenario_name, model_type='Transformer_BERT', epochs=
         weight_decay=0.01,
         load_best_model_at_end=True,
         metric_for_best_model="accuracy",
-        remove_unused_columns=False 
+        remove_unused_columns=True
     )
     
     trainer = CustomTrainer(
