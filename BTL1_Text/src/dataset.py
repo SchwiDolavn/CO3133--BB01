@@ -23,7 +23,7 @@ def load_and_tokenize_data(model_name="bert-base-uncased"):
 
     # Hàm tiền xử lý: Tokenize text và chuyển nhãn thành số
     def preprocess_function(examples):
-        tokenized = tokenizer(examples['text'], padding="max_length", truncation=True, max_length=128)
+        tokenized = tokenizer(examples['text'], padding="max_length", truncation=True, max_length=55)
         tokenized['labels'] = label_encoder.transform(examples['label']).tolist()
         return tokenized
 
