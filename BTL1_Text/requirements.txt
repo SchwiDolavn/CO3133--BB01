@@ -1,0 +1,18 @@
+# Core Machine Learning & Deep Learning
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.12.0
+numpy>=1.23.5
+pandas>=1.5.3
+scikit-learn>=1.2.2
+
+# Visualization & Explainability
+matplotlib>=3.7.1
+seaborn>=0.12.2
+lime>=0.2.0.1
+
+# Natural Language Processing utilities
+nltk>=3.8.1
+
+# Progress bar and utilities
+tqdm>=4.65.0
