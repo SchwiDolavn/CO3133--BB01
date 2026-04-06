@@ -39,14 +39,15 @@ class BiLSTM_Model(nn.Module):
 
         # 5. Tự động tính Loss nếu có truyền nhãn (Để dùng được Trainer API)
         loss = None
-        if loss_type == 'focal':
-            # Sử dụng Focal Loss (đã chuyển sang PyTorch)
-            loss_fct = focal_loss_pytorch(gamma=2.0, alpha=0.25)
-            loss = loss_fct(logits, labels)
-        else:
-            # Sử dụng mặc định
-            loss_fct = nn.CrossEntropyLoss()
-            loss = loss_fct(logits, labels)
+        if labels is not None: 
+            if loss_type == 'focal':
+                # Sử dụng Focal Loss (đã chuyển sang PyTorch)
+                loss_fct = focal_loss_pytorch(gamma=2.0, alpha=0.25)
+                loss = loss_fct(logits, labels)
+            else:
+                # Sử dụng mặc định
+                loss_fct = nn.CrossEntropyLoss()
+                loss = loss_fct(logits, labels)
 
         # Trả về format chuẩn của Hugging Face
         return SequenceClassifierOutput(loss=loss, logits=logits)

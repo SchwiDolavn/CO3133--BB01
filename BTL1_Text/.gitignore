@@ -1,1 +1,10 @@
+# Bỏ qua các file checkpoint mô hình AI khổng lồ
+*.safetensors
+*.pt
+*.pth
+*.bin
+checkpoint-*/
+
+# Tùy chọn: Nếu bạn không cần đưa toàn bộ thư mục kết quả lên Git
+BTL1_Text/result/checkpoints_*/
 BTL1_Text/data/
