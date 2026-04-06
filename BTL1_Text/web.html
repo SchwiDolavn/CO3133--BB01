@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PubMed RCT 20k — Báo cáo phân loại Văn bản</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0b1120;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);--text:#eef2ff;--muted:#99a4c8;--pri:#7c9cff;--sec:#5eead4;--gold:#f59e0b;--rose:#fb7185;--violet:#9b8cff;--radius:20px;--shadow:0 16px 48px rgba(0,0,0,.3)}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;color:var(--text);background:radial-gradient(ellipse at 10% 0%,rgba(124,156,255,.18),transparent 40%),radial-gradient(ellipse at 90% 0%,rgba(94,234,212,.14),transparent 35%),var(--bg);min-height:100vh;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.ctr{max-width:1120px;margin:0 auto;padding:0 20px}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);background:rgba(11,17,32,.72);border-bottom:1px solid var(--border)}
+nav .inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;flex-wrap:wrap}
+nav .brand{font-weight:800;font-size:.95rem;letter-spacing:.5px}
+nav .links{display:flex;gap:20px;flex-wrap:wrap}
+nav .links a{color:var(--muted);font-weight:600;font-size:.92rem;transition:.2s}
+nav .links a:hover{color:#fff}
+.hero{padding:64px 0 32px}
+.hero-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:stretch}
+.glass{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.hero-main{padding:36px}
+.badge{display:inline-block;padding:6px 14px;border-radius:999px;background:rgba(124,156,255,.14);color:#c6d0ff;font-size:.82rem;font-weight:700;margin-bottom:16px}
+.hero h1{font-size:clamp(1.8rem,3.6vw,3rem);line-height:1.12;letter-spacing:-.02em;margin-bottom:14px}
+.hero p{color:var(--muted);font-size:1rem}
+.hero-actions{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap}
+.btn{padding:13px 22px;border-radius:14px;font-weight:700;font-size:.92rem;transition:.18s}
+.btn:hover{transform:translateY(-2px)}
+.btn-pri{background:linear-gradient(135deg,var(--pri),var(--violet));color:#fff}
+.btn-ghost{background:rgba(255,255,255,.07);color:#fff;border:1px solid var(--border)}
+.hero-side{padding:24px;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.info-box{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+.info-box .lbl{display:block;color:var(--sec);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.info-box .val{color:#fff;font-size:.94rem}
+section{padding:20px 0}
+.stitle{font-size:1.6rem;letter-spacing:-.02em;margin-bottom:16px}
+.sdesc{color:var(--muted);margin-bottom:20px}
+.pipe-scroll{overflow-x:auto;padding-bottom:4px}
+.pipe{display:flex;gap:0;min-width:880px;align-items:stretch}
+.pipe-card{flex:1;min-width:152px;padding:20px 18px;border-radius:18px;background:rgba(18,26,51,.8);border:1px solid var(--border);box-shadow:0 10px 30px rgba(0,0,0,.22);display:flex;flex-direction:column;gap:10px}
+.pipe-card::before{content:'';display:block;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--pri),var(--sec));margin-bottom:2px}
+.pipe-badge{display:inline-block;width:fit-content;padding:4px 12px;border-radius:999px;background:rgba(124,156,255,.14);color:#c6d0ff;font-size:.72rem;font-weight:800;letter-spacing:.06em}
+.pipe-card h4{font-size:1.05rem;color:#fff}
+.pipe-card .pd{color:var(--muted);font-size:.84rem;line-height:1.65}
+.pipe-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.ptag{padding:5px 10px;border-radius:999px;font-size:.74rem;font-weight:700;line-height:1}
+.ptag.b{background:linear-gradient(135deg,#365ed8,#4b7cff);color:#fff}
+.ptag.t{background:linear-gradient(135deg,#178f87,#1fb5ac);color:#fff}
+.ptag.o{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#c6d0ff}
+.arrow{flex:0 0 32px;display:flex;align-items:center;justify-content:center}
+.arrow i{width:0;height:0;border-top:12px solid transparent;border-bottom:12px solid transparent;border-left:16px solid var(--sec);filter:drop-shadow(0 0 6px rgba(94,234,212,.35))}
+.tw{overflow-x:auto;border-radius:14px;border:1px solid var(--border);margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+th{background:rgba(124,156,255,.1);color:#c6d0ff;font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+.cw{margin-top:16px;padding:16px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05)}
+.cw canvas{width:100%!important;max-height:360px}
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ccard{padding:22px;position:relative;overflow:hidden;transition:.2s}
+.ccard:hover{transform:translateY(-4px);border-color:rgba(124,156,255,.4)}
+.cnum{display:inline-flex;width:40px;height:40px;align-items:center;justify-content:center;border-radius:12px;background:rgba(124,156,255,.16);color:#c6d0ff;font-weight:800;margin-bottom:14px}
+.ccard h3{font-size:1.1rem;margin-bottom:10px}
+.ccard p{color:var(--muted);font-size:.92rem;line-height:1.7}
+.sub{margin:24px 0 10px;font-size:1.08rem;color:var(--sec);font-weight:700}
+footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem}
+@media(max-width:960px){.hero-grid,.cgrid{grid-template-columns:1fr}.hero{padding-top:40px}}
+@media(max-width:640px){nav .inner{flex-direction:column;align-items:flex-start}.hero h1{font-size:1.8rem}.btn{width:100%}.hero-actions{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<nav><div class="ctr inner">
+  <div class="brand">NHÓM BB01 - BÀI TẬP LỚN 1</div>
+  <div class="links">
+    <a href="../../index.html">Trang chủ</a>
+    <a href="#pipeline">Pipeline</a>
+    <a href="#results">Kết quả</a>
+  </div>
+</div></nav>
+
+<main>
+<section class="hero" id="intro"><div class="ctr hero-grid">
+  <div class="glass hero-main">
+    <div class="badge">Báo cáo Dữ liệu Văn bản (Text)</div>
+    <h1>PubMed RCT 20k — Phân loại tóm tắt y khoa</h1>
+    <p>Huấn luyện và so sánh giữa RNN (Bi-LSTM) và Transformer (BERT). Áp dụng các kỹ thuật Focal Loss, Augmentation và Quantization để phân tích mở rộng.</p>
+    <div class="hero-actions">
+      <a class="btn btn-pri" href="#results">Xem kết quả</a>
+      <a class="btn btn-ghost" href="https://github.com/..." target="_blank">Mã nguồn GitHub</a>
+    </div>
+  </div>
+  <div class="glass hero-side">
+    <div class="info-box"><span class="lbl">Bộ dữ liệu</span><div class="val">PubMed RCT 20k (~200.000 mẫu)</div></div>
+    <div class="info-box"><span class="lbl">Nhãn</span><div class="val">5 lớp: Background, Objective, Methods, Results, Conclusions</div></div>
+    <div class="info-box"><span class="lbl">Mô hình</span><div class="val">Bi-LSTM, BERT-base, DistilBERT</div></div>
+    <div class="info-box"><span class="lbl">Cấu hình</span><div class="val">PyTorch, Hugging Face Trainer, LIME Explainability</div></div>
+  </div>
+</div></section>
+
+<section id="pipeline"><div class="ctr">
+  <div class="glass" style="padding:28px">
+    <h2 class="stitle">Quy trình thực hiện (Pipeline)</h2>
+    <div class="pipe-scroll"><div class="pipe">
+      <div class="pipe-card">
+        <span class="pipe-badge">STEP 01</span>
+        <h4>Tiền xử lý (EDA)</h4>
+        <p class="pd">Làm sạch câu, loại bỏ dấu câu, quy chuẩn ký tự số (@ -> number).</p>
+        <div class="pipe-tags"><span class="ptag b">Text Cleaning</span><span class="ptag o">Imbalanced</span></div>
+      </div>
+      <div class="arrow"><i></i></div>
+      <div class="pipe-card">
+        <span class="pipe-badge">STEP 02</span>
+        <h4>Dataloader & Augment</h4>
+        <p class="pd">Băm từ (WordPiece) max_length 55. Áp dụng Random Word Deletion.</p>
+        <div class="pipe-tags"><span class="ptag t">Tokenize</span><span class="ptag o">Augmentation</span></div>
+      </div>
+      <div class="arrow"><i></i></div>
+      <div class="pipe-card">
+        <span class="pipe-badge">STEP 03</span>
+        <h4>Huấn luyện Mô hình</h4>
+        <p class="pd">So sánh chiến lược Fine-tune: BERT Freeze, BERT Full và Bi-LSTM.</p>
+        <div class="pipe-tags"><span class="ptag b">Bi-LSTM</span><span class="ptag o">BERT</span></div>
+      </div>
+      <div class="arrow"><i></i></div>
+      <div class="pipe-card">
+        <span class="pipe-badge">STEP 04</span>
+        <h4>Xử lý Lệch lớp</h4>
+        <p class="pd">Thay thế CrossEntropy bằng Focal Loss để cứu vãn nhãn thiểu số (Objective).</p>
+        <div class="pipe-tags"><span class="ptag o">Focal Loss</span></div>
+      </div>
+      <div class="arrow"><i></i></div>
+      <div class="pipe-card">
+        <span class="pipe-badge">STEP 05</span>
+        <h4>Phân tích (Explain)</h4>
+        <p class="pd">Đo tốc độ, Quantization INT8 và chạy biểu đồ LIME giải thích mô hình.</p>
+        <div class="pipe-tags"><span class="ptag t">LIME</span><span class="ptag o">Efficiency</span></div>
+      </div>
+    </div></div>
+  </div>
+</div></section>
+
+<section id="results"><div class="ctr">
+  <h2 class="stitle">Kết quả thực nghiệm 3 Case chính</h2>
+  <p class="sdesc">Dữ liệu được trích xuất từ báo cáo huấn luyện trên tập Validation 30.000 mẫu.</p>
+
+  <div class="glass" style="padding:24px;margin-bottom:18px">
+    <h3 class="sub" style="margin-top:0">So sánh Kiến trúc và Chiến lược Fine-tune</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Scenario</th><th>Kiến trúc</th><th>Độ chính xác (Acc)</th><th>F1-Score (Macro)</th><th>Nhận xét</th></tr></thead>
+      <tbody>
+        <tr><td>BERT_Freeze</td><td>Transformer</td><td>61.84%</td><td>46.94%</td><td>Chịu tác động tiêu cực từ hiện tượng mất cân bằng dữ liệu, khiến độ nhạy của lớp 'Objective' sụt giảm nghiêm trọng xuống mức 6.1%.</td></tr>
+        <tr><td>Bi-LSTM_Full</td><td>RNN</td><td>82.90%</td><td>76.10%</td><td>Đạt hiệu năng khả quan. Cơ chế trích xuất đặc trưng tuần tự của kiến trúc RNN cho thấy khả năng hội tụ ổn định dù được khởi tạo ngẫu nhiên và huấn luyện từ đầu.</td></tr>
+        <tr><td>BERT_Full</td><td>Transformer</td><td><strong>87.30%</strong></td><td><strong>81.34%</strong></td><td>Đạt hiệu năng tối ưu nhất. Khắc phục thành công vấn đề mất cân bằng phân phối, cải thiện mạnh mẽ khả năng nhận diện lớp thiểu số với chỉ số Recall của nhãn 'Objective' đạt mức 60.3%</td></tr>
+      </tbody>
+    </table></div>
+    <div class="cw"><canvas id="chTextComp"></canvas></div>
+  </div>
+</div></section>
+
+</main>
+
+<footer><div class="ctr">© 2026 Nhóm BB01 · Báo cáo môn Học sâu và ứng dụng</div></footer>
+
+<script>
+const G='rgba(255,255,255,.05)',T='#99a4c8';
+Chart.defaults.color=T;
+Chart.defaults.font.family='Inter,system-ui,sans-serif';
+
+/* Biểu đồ so sánh 3 mô hình */
+new Chart(document.getElementById('chTextComp'),{type:'bar',data:{
+  labels:['BERT_Freeze', 'Bi-LSTM_Full', 'BERT_Full'],
+  datasets:[
+    {label:'Accuracy (%)',data:[61.84, 82.90, 87.30],backgroundColor:'#5eead4'},
+    {label:'Macro F1 (%)',data:[46.94, 76.10, 81.34],backgroundColor:'#7c9cff'}
+  ]},options:{responsive:true, plugins:{legend:{labels:{boxWidth:12,padding:12}}},
+  scales:{y:{min:0,max:100,grid:{color:G},ticks:{callback:v=>v+'%'}}}}
+});
+</script>
+</body>
+</html>
