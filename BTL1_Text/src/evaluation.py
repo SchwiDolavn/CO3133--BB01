@@ -65,7 +65,7 @@ def error_analysis(texts, y_true, y_pred_probs, label_encoder, scenario_name, to
     # Xuất file CSV phân tích lỗi
     file_path = f'../result/{scenario_name}_error_analysis.csv'
     df_errors.to_csv(file_path, index=False)
-    print(f"\n✅ Đã xuất toàn bộ phân tích lỗi ra {file_path}")
+    print(f"\nĐã xuất toàn bộ phân tích lỗi ra {file_path}")
 
 def export_results_to_csv(y_true, y_pred, classes, model_name):
     """Hàm bị mất đã được khôi phục: Xuất báo cáo chi tiết ra file CSV"""
@@ -74,5 +74,5 @@ def export_results_to_csv(y_true, y_pred, classes, model_name):
     
     file_path = f"../result/{model_name}_classification_report.csv"
     df_report.to_csv(file_path)
-    print(f"✅ Đã xuất kết quả chi tiết ra: {file_path}")
+    print(f"Đã xuất kết quả chi tiết ra: {file_path}")
     return df_report

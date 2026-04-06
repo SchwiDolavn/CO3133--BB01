@@ -93,7 +93,7 @@ def train_pipeline_pytorch(scenario_name, model_type='Transformer_BERT', epochs=
         compute_metrics=compute_metrics,
     )
     
-    print(f"\n🚀 BẮT ĐẦU HUẤN LUYỆN: {model_type}...")
+    print(f"\nBẮT ĐẦU HUẤN LUYỆN: {model_type}...")
     trainer.train()
     
     return trainer, val_dataset, label_encoder, tokenizer

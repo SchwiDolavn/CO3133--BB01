@@ -66,12 +66,12 @@ if __name__ == "__main__":
         # 3. Đánh giá Hiệu quả (Efficiency)
         m_size = get_model_size(trainer.model)
 
-        # SỬA Ở ĐÂY: Chỉ lấy 100 câu đầu tiên để đo tốc độ cho siêu nhanh
+        #Chỉ lấy 100 câu đầu tiên để đo tốc độ cho siêu nhanh
         subset_val = val_dataset.select(range(100))
         temp_loader = DataLoader(subset_val, batch_size=1)
 
         # Đo tốc độ trên 100 câu
-        print("⏱️ Đang đo tốc độ suy luận (Inference time) trên CPU...")
+        print("Đang đo tốc độ suy luận (Inference time) trên CPU...")
         inf_time = measure_inference_time_pytorch(trainer.model, temp_loader, device="cpu")
 
         # 4. Giải thích mô hình (Interpretability - chỉ chạy cho câu đầu tiên)
@@ -109,18 +109,18 @@ if __name__ == "__main__":
     # --- SAU KHI CHẠY XONG CÁC KỊCH BẢN ---
 
     # 8. MỞ RỘNG: Thử nghiệm Quantization cho mô hình BERT cuối cùng
-    print("\n🛠️ Đang thực hiện Quantization (Nén mô hình) để minh họa Efficiency...")
+    print("\nĐang thực hiện Quantization (Nén mô hình) để minh họa Efficiency...")
     # Khởi tạo lại một mô hình BERT để minh họa việc nén
     bert_base_model = build_model_pytorch('Transformer_BERT', num_classes=len(label_encoder.classes_), vocab_size=tokenizer.vocab_size)
     q_model = apply_quantization(bert_base_model)
-    print(f"✅ Kích thước BERT ban đầu: {get_model_size(bert_base_model):.2f} MB")
-    print(f"✅ Kích thước sau khi nén (INT8): {get_model_size(q_model):.2f} MB")
+    print(f"Kích thước BERT ban đầu: {get_model_size(bert_base_model):.2f} MB")
+    print(f"Kích thước sau khi nén (INT8): {get_model_size(q_model):.2f} MB")
 
     # 9. Xuất báo cáo so sánh tổng thể
     df_final = pd.DataFrame(summary_results)
     df_final.to_csv("../result/comprehensive_comparison_report.csv", index=False)
 
     print("\n" + "V" * 60)
-    print(" ✅ HOÀN TẤT TOÀN BỘ QUY TRÌNH MỞ RỘNG.")
-    print(" ✅ KẾT QUẢ TỔNG HỢP TẠI: ../result/comprehensive_comparison_report.csv")
+    print(" HOÀN TẤT TOÀN BỘ QUY TRÌNH MỞ RỘNG.")
+    print(" KẾT QUẢ TỔNG HỢP TẠI: ../result/comprehensive_comparison_report.csv")
     print("V" * 60)

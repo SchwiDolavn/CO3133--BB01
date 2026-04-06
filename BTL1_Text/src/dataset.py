@@ -65,14 +65,13 @@ def load_and_tokenize_data(model_name="bert-base-uncased", augment=False):
 
     print("Đang Tokenize tập Train và Validation...")
     
-    # THÊM remove_columns=['label'] VÀO 2 DÒNG NÀY
     print("Đang Tokenize tập Train...")
     train_dataset = ds['train'].map(lambda x: preprocess_function(x, is_train=True), batched=True, remove_columns=['label'])
 
     print("Đang Tokenize tập Validation...")
     val_dataset = ds['validation'].map(lambda x: preprocess_function(x, is_train=False), batched=True, remove_columns=['label'])
     
-    # Ép kiểu dữ liệu sang PyTorch Tensors (Giữ nguyên)
+    # Ép kiểu dữ liệu sang PyTorch Tensors 
     train_dataset.set_format(type="torch", columns=['input_ids', 'attention_mask', 'labels'], output_all_columns=True)
     val_dataset.set_format(type="torch", columns=['input_ids', 'attention_mask', 'labels'], output_all_columns=True)
     

@@ -46,4 +46,4 @@ def explain_prediction_lime(text, model, tokenizer, label_encoder, scenario_name
     file_name = f'../result/lime_explanation_{scenario_name}.png'
     plt.savefig(file_name)
     plt.close() 
-    print(f"✅ Đã lưu biểu đồ giải thích tại {file_name}")
+    print(f"Đã lưu biểu đồ giải thích tại {file_name}")

@@ -1,0 +1,6 @@
+ct	CT	a CT radiology scan
+xray	X-ray	an X-ray radiograph
+mri	MRI	an MRI radiology image
+ultrasound	Ultrasound	an ultrasound medical image
+angiography	Angiography	an angiography or vascular radiology image
+fluoroscopy	Fluoroscopy	a fluoroscopy medical image

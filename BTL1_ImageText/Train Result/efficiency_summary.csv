@@ -1,0 +1,2 @@
+model,trainable_params,bench_samples,elapsed_sec,sec_per_sample,best_zero_shot_method,best_zero_shot_acc,best_retrieval_like_method,best_retrieval_like_acc,best_few_shot_image_acc,best_few_shot_image_text_acc
+ViT + CLIP-style text + OT,10699779,640,3.4491469860076904,0.005389292165637017,Zero-shot image-only (global+local),0.8782683240462923,Image+text prompt matching (global),0.9691384483497643,0.8182597513930562,0.9284183454779255
