@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import DataLoader
 from sklearn.metrics import accuracy_score
-
-# Import các hàm từ các file module của bạn
 from train import train_pipeline_pytorch
 from models import build_model_pytorch
 from evaluation import evaluate_model, export_results_to_csv, plot_training_history, error_analysis
@@ -27,49 +25,55 @@ if __name__ == "__main__":
 
         # 2. NHÓM: DỮ LIỆU MẤT CÂN BẰNG (Focal Loss)
         {'name': 'BERT_Full_Focal', 'model': 'Transformer_BERT', 'freeze': False, 'focal': True, 'aug': False},
-        {'name': 'Bi-LSTM_Focal', 'model': 'RNN_Bi-LSTM', 'freeze': False, 'focal': True, 'aug': False}, 
+        {'name': 'Bi-LSTM_Focal', 'model': 'RNN_Bi-LSTM', 'freeze': False, 'focal': True, 'aug': False},
 
         # 3. NHÓM: AUGMENTATION & ROBUSTNESS
-        {'name': 'BERT_Augmented', 'model': 'Transformer_BERT', 'freeze': False, 'focal': False, 'aug': True}, 
+        {'name': 'BERT_Augmented', 'model': 'Transformer_BERT', 'freeze': False, 'focal': False, 'aug': True},
         {'name': 'Bi-LSTM_Augmented', 'model': 'RNN_Bi-LSTM', 'freeze': False, 'focal': False, 'aug': True},
 
         # 4. NHÓM: HIỆU QUẢ MÔ HÌNH (Mô hình nhỏ)
         {'name': 'DistilBERT_Small', 'model': 'Transformer_DistilBERT', 'freeze': False, 'focal': False, 'aug': False},
     ]
-    
+
     summary_results = []
 
     for sc in scenarios:
         print(f"\n" + "="*60)
         print(f" ĐANG THỰC HIỆN KỊCH BẢN: {sc['name']} ")
         print("="*60)
-        
+
         start_train = time.time()
-        
+
         # 1. Huấn luyện theo kịch bản (Truyền toàn bộ biến điều khiển vào pipeline)
         trainer, val_dataset, label_encoder, tokenizer = train_pipeline_pytorch(
             scenario_name=sc['name'],
-            model_type=sc['model'], 
+            model_type=sc['model'],
             epochs=3,
             use_focal_loss=sc['focal'],
             freeze_backbone=sc['freeze'],
             use_augmentation=sc['aug']
         )
-        
+
         train_duration = time.time() - start_train
-        
+
         # 2. Dự đoán và trích xuất xác suất (cho Error Analysis/LIME)
         predictions = trainer.predict(val_dataset)
         y_pred_logits = torch.from_numpy(predictions.predictions)
         y_pred_probs = torch.nn.functional.softmax(y_pred_logits, dim=-1).numpy()
         y_pred_classes = np.argmax(y_pred_probs, axis=-1)
         y_true = np.array(val_dataset['labels'])
-        
+
         # 3. Đánh giá Hiệu quả (Efficiency)
         m_size = get_model_size(trainer.model)
-        temp_loader = DataLoader(val_dataset, batch_size=1)
+
+        # SỬA Ở ĐÂY: Chỉ lấy 100 câu đầu tiên để đo tốc độ cho siêu nhanh
+        subset_val = val_dataset.select(range(100))
+        temp_loader = DataLoader(subset_val, batch_size=1)
+
+        # Đo tốc độ trên 100 câu
+        print("⏱️ Đang đo tốc độ suy luận (Inference time) trên CPU...")
         inf_time = measure_inference_time_pytorch(trainer.model, temp_loader, device="cpu")
-        
+
         # 4. Giải thích mô hình (Interpretability - chỉ chạy cho câu đầu tiên)
         sample_text = val_dataset['text'][0]
         current_device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -115,7 +119,7 @@ if __name__ == "__main__":
     # 9. Xuất báo cáo so sánh tổng thể
     df_final = pd.DataFrame(summary_results)
     df_final.to_csv("../result/comprehensive_comparison_report.csv", index=False)
-    
+
     print("\n" + "V" * 60)
     print(" ✅ HOÀN TẤT TOÀN BỘ QUY TRÌNH MỞ RỘNG.")
     print(" ✅ KẾT QUẢ TỔNG HỢP TẠI: ../result/comprehensive_comparison_report.csv")
