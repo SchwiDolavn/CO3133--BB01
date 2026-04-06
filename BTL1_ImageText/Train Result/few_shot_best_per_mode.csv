@@ -1,0 +1,4 @@
+method,embedding_key,best_k,test_accuracy,test_macro_f1
+Few-shot prototype (text-only),text_emb,64,0.9372053150450065,0.8604028934760172
+Few-shot prototype (image+text),multimodal_emb,64,0.9284183454779255,0.8453149108408328
+Few-shot prototype (image-only),image_emb,64,0.8182597513930562,0.7103545806989522

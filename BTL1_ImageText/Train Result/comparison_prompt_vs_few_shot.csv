@@ -1,0 +1,9 @@
+method,group,accuracy,macro_f1
+Zero-shot image-only (global),zero_shot_proper,0.8780540077153879,0.7661609711213798
+Zero-shot image-only (global+local),zero_shot_proper,0.8782683240462923,0.7641668835844885
+Text-only prompt matching (global),text_only_ablation,0.979854264894985,0.9647846152421561
+Image+text prompt matching (global),retrieval_like,0.9691384483497643,0.9274958502355659
+Image+text prompt matching (global+local),retrieval_like,0.9689241320188599,0.9255311951297451
+Few-shot prototype (text-only) | best k=64,few_shot,0.9372053150450065,0.8604028934760172
+Few-shot prototype (image+text) | best k=64,few_shot,0.9284183454779255,0.8453149108408328
+Few-shot prototype (image-only) | best k=64,few_shot,0.8182597513930562,0.7103545806989522

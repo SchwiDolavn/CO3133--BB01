@@ -1,0 +1,4 @@
+method,ece
+Few-shot prototype (image-only) | k=64,0.5632607254203277
+Zero-shot image-only (global+local),0.6701241186470676
+Image+text prompt matching (global),0.7294589892298022

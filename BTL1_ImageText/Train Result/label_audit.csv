@@ -1,0 +1,4 @@
+split,total_rows,clean_single_label,ambiguous_multi_label,unmatched,missing_image_file
+train,65448,37042,811,27595,28
+val,8180,4561,99,3520,5
+test,8179,4668,98,3413,3
