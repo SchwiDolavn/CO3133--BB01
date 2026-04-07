@@ -302,12 +302,35 @@
       line-height: 1.7;
     }
 
+    .card-links {
+      display: flex;
+      flex-direction: column;
+      gap: 20px; 
+      margin-top: 24px;
+      width: 100%;
+    }
+
     .project-link {
-      display: inline-flex;
+      display: flex;
+      width: 100%;
       align-items: center;
-      gap: 8px;
+      justify-content: center; 
+      gap: 10px;
       color: white;
-      font-weight: 700;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .project-link:hover {
+      background: rgba(124, 156, 255, 0.15);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(124, 156, 255, 0.15);
     }
 
     .footer {
@@ -419,7 +442,7 @@
             </div>
 
             <div class="member">
-              <strong>NGUYỄN ĐĂNG	KHÁNH</strong>
+              <strong>NGUYỄN ĐĂNG KHÁNH</strong>
               <span>MSSV: 2311512 • Vai trò: Thành viên</span>
             </div>
           </div>
@@ -435,30 +458,37 @@
         </p>
 
         <div class="projects-grid">
-          <a class="project-card" href="./projects/btl1/">
+          
+          <div class="project-card"> 
             <div class="project-number">01</div>
             <h3>Bài tập lớn 1</h3>
             <p>
-              Chưa biết ghi gì.
+              Phân loại trên 3 loại dữ liệu: Ảnh, Văn bản và Đa phương thức.
             </p>
-            <span class="project-link">Xem chi tiết →</span>
-          </a>
+            
+            <div class="card-links">
+              <a class="project-link" href="./BTL1_Image/web.html">Dữ liệu Ảnh</a>
+              <a class="project-link" href="./BTL1_Text/web.html">Dữ liệu Văn bản</a>
+              <a class="project-link" href="./BTL1_ImageText/index.html">Đa phương thức</a>
+            </div>
+          </div>
 
-          <a class="project-card" href="./projects/btl2/">
+          <div class="project-card"> 
             <div class="project-number">02</div>
             <h3>Bài tập lớn 2</h3>
             <p>
-              Coming soon...
+              Coming soon... 
             </p>
-          </a>
+          </div>
 
-          <a class="project-card" href="./projects/btl3/">
+          <div class="project-card"> 
             <div class="project-number">03</div>
             <h3>Bài tập lớn 3</h3>
             <p>
-              Cooming soon...
+              Coming soon... 
             </p>
-          </a>
+          </div>
+
         </div>
       </div>
     </section>
