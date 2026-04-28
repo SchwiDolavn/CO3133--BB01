@@ -5,11 +5,10 @@
 Dự án này là bài tập lớn số 1 của môn học **CO3133 - Học Sâu và Ứng Dụng** (Deep Learning). Nhóm thực hiện bài toán phân loại trên ba loại dữ liệu: ảnh, văn bản và đa phương thức (ảnh + văn bản).
 
 ## Thông tin 
-|Thông tin|
-|----------------|----------------|
-| **Giảng viên** | TS. Lê Thành Sách |
-| **Mã nhóm** | BB01 |
-| **Số thành viên** | 3 sinh viên |
+**Giảng viên**: TS. Lê Thành Sách
+**Mã nhóm**: BB01 
+**Số thành viên**: 3 sinh viên
+
 | **Tên thành viên** | **MSSV** |
 |----------------|----------------|
 |Đinh Ngụy Nguyệt Hà|2352286|
