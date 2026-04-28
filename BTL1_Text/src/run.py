@@ -48,7 +48,7 @@ if __name__ == "__main__":
         trainer, val_dataset, label_encoder, tokenizer = train_pipeline_pytorch(
             scenario_name=sc['name'],
             model_type=sc['model'],
-            epochs=3,
+            epochs=5,
             use_focal_loss=sc['focal'],
             freeze_backbone=sc['freeze'],
             use_augmentation=sc['aug']
