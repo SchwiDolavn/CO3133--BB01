@@ -55,11 +55,12 @@ def error_analysis(texts, y_true, y_pred_probs, label_encoder, scenario_name, to
     
     error_data = []
     for idx in errors_idx:
+        py_idx = int(idx) 
         error_data.append({
-            'Text': texts[idx],
-            'True_Label': label_encoder.inverse_transform([y_true[idx]])[0],
-            'Predicted_Label': label_encoder.inverse_transform([y_pred_classes[idx]])[0],
-            'Confidence': confidences[idx]
+            'Text': texts[py_idx],
+            'True_Label': label_encoder.inverse_transform([y_true[py_idx]])[0],
+            'Predicted_Label': label_encoder.inverse_transform([y_pred_classes[py_idx]])[0],
+            'Confidence': confidences[py_idx]
         })
         
     df_errors = pd.DataFrame(error_data)
