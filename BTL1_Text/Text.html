@@ -399,7 +399,7 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">2.1 Pipeline Dữ liệu (HuggingFace Datasets)</h3>
     <p style="color:var(--muted);line-height:1.8">
-      Thay vì sử dụng <code>torch.utils.data.Dataset</code> truyền thống, hệ thống tận dụng sức mạnh của <strong>HuggingFace Datasets</strong> để tải và xử lý luồng (streaming) dữ liệu. Dữ liệu được xử lý song song qua hàm <code>.map()</code> và tự động chuyển đổi sang định dạng Tensor bằng lệnh <code>set_format(type="torch")</code>, giúp tối ưu hóa tối đa RAM hệ thống.
+      Thay vì sử dụng <code>torch.utils.data.Dataset</code>, hệ thống tận dụng sức mạnh của <strong>HuggingFace Datasets</strong> để tải và xử lý luồng dữ liệu. Dữ liệu được xử lý song song qua hàm <code>.map()</code> và tự động chuyển đổi sang định dạng Tensor bằng lệnh <code>set_format(type="torch")</code>, giúp tối ưu hóa tối đa RAM hệ thống.
     </p>
   </div>
 
@@ -414,15 +414,15 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
       </tbody>
     </table></div>
     <p style="color:var(--muted);margin-top:16px;font-size:.9rem">
-      <strong>Biện luận:</strong> Việc ép mô hình Bi-LSTM sử dụng chung bộ Tokenizer của BERT giúp tạo ra môi trường Baseline công bằng tuyệt đối. Mọi chênh lệch về hiệu năng (Accuracy/F1) giữa các kịch bản sẽ phản ánh đúng 100% sức mạnh cấu trúc lõi của mạng Nơ-ron.
+      <strong>Biện luận:</strong> Việc ép mô hình Bi-LSTM sử dụng chung bộ Tokenizer của BERT giúp tạo ra môi trường Baseline công bằng tuyệt đối. Mọi chênh lệch về hiệu năng (Accuracy/F1) giữa các case study sẽ phản ánh đúng 100% sức mạnh cấu trúc của mạng Nơ-ron.
     </p>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">2.3 Data Augmentation (Làm giàu dữ liệu)</h3>
     <p style="color:var(--muted);line-height:1.8">
-      Áp dụng kỹ thuật <strong>Random Word Deletion</strong> tự phát triển: Xóa ngẫu nhiên đúng 1 từ trong các câu huấn luyện có độ dài lớn hơn 5 từ. 
-      <br><em>Mục đích:</em> Kỹ thuật này hoạt động như một cơ chế Regularization tự nhiên, ép mô hình (đặc biệt là Transformer) không được quá phụ thuộc (overfit) vào một từ khóa duy nhất để dự đoán nhãn, qua đó tăng tính bền bỉ (robustness) trên tập Test.
+      Áp dụng kỹ thuật <strong>Random Word Deletion</strong>: Xóa ngẫu nhiên đúng 1 từ trong các câu huấn luyện có độ dài lớn hơn 5 từ. 
+      <br><em>Mục đích:</em> Kỹ thuật này hoạt động như một cơ chế Regularization tự nhiên, ép mô hình (đặc biệt là Transformer) không được quá phụ thuộc vào một từ khóa duy nhất để dự đoán nhãn, qua đó tăng tính bền bỉ trên tập Test.
     </p>
   </div>
 
@@ -436,8 +436,8 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   <div class="glass" style="padding:24px">
     <h3 class="sub" style="margin-top:0">2.5 DataLoader Configuration</h3>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li><strong>Batch size:</strong> 32 (Cân bằng giữa tốc độ cập nhật Gradient và giới hạn VRAM)</li>
-      <li><strong>Padding Strategy:</strong> <code>max_length</code> (Bù 0 cho các câu ngắn)</li>
+      <li><strong>Batch size:</strong> 32 </li>
+      <li><strong>Padding Strategy:</strong> Bù 0 cho các câu ngắn hơn max length</li>
       <li><strong>Truncation:</strong> Cắt bỏ triệt để phần dư thừa vượt quá 128 tokens</li>
       <li><strong>Tích hợp:</strong> Các tham số này được quản lý tự động, chặt chẽ thông qua <code>HuggingFace Trainer</code> API (thay cho vòng lặp train thủ công).</li>
     </ul>
@@ -463,27 +463,27 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">3.2 Cấu hình Huấn luyện (Trainer API)</h3>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li><strong>Learning Rate:</strong> <code>2e-5</code> cho họ Transformer (Fine-tune tinh chỉnh) và <code>1e-3</code> cho Bi-LSTM (Train from scratch).</li>
+      <li><strong>Learning Rate:</strong> <code>2e-5</code> cho Transformer và <code>1e-3</code> cho Bi-LSTM.</li>
       <li><strong>Tối ưu hóa phần cứng:</strong> Kích hoạt tính toán độ chính xác kép (Mixed Precision - <code>fp16=True</code>) giúp tăng tốc độ train trên GPU NVIDIA.</li>
-      <li><strong>Epochs & Chống Overfitting:</strong> Giới hạn <code>epochs = 5</code> cho mọi kịch bản. Tích hợp <code>EarlyStoppingCallback</code> (Dừng sớm nếu Macro F1 không cải thiện sau 2 epochs liên tiếp).</li>
-      <li><strong>Weight Decay:</strong> Thiết lập <code>0.01</code> để chuẩn hóa (Regularization) trọng số mạng lưới.</li>
+      <li><strong>Epochs & Chống Overfitting:</strong> Giới hạn <code>epochs = 5</code> cho mọi case study. Tích hợp <code>EarlyStoppingCallback</code> (Dừng sớm nếu Macro F1 không cải thiện sau 2 epochs liên tiếp).</li>
+      <li><strong>Weight Decay:</strong> Thiết lập <code>0.01</code> để chuẩn hóa trọng số mạng lưới.</li>
     </ul>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">3.3 Chiến lược Loss Function</h3>
     <div class="tw"><table>
-      <thead><tr><th>Kịch bản</th><th>Hàm mất mát</th><th>Bản chất kỹ thuật</th></tr></thead>
+      <thead><tr><th>case study</th><th>Hàm mất mát</th><th>Bản chất kỹ thuật</th></tr></thead>
       <tbody>
         <tr>
           <td><strong>Standard</strong></td>
           <td>Cross Entropy (CE)</td>
-          <td>Hàm mặc định của PyTorch. Tính toán độ lỗi dựa trên phân bố tự nhiên. Dễ bị thiên vị (bias) về phía lớp đa số (Methods, Results).</td>
+          <td>Hàm mặc định của PyTorch. Tính toán độ lỗi dựa trên phân bố tự nhiên. Dễ bị thiên vị về phía lớp đa số (Methods, Results).</td>
         </tr>
         <tr>
           <td><strong>Focal Loss</strong></td>
           <td>Focal Loss + Class Weights</td>
-          <td>Hàm tùy chỉnh (Custom Loss). Tích hợp tham số <code>gamma=2.0</code> để giảm sự chú ý vào các mẫu dễ đoán, kết hợp với bộ trọng số tỷ lệ nghịch (từ Scikit-Learn) để "ép" mạng nơ-ron phải học kỹ lớp thiểu số (Objective).</td>
+          <td>Hàm tùy chỉnh. Tích hợp tham số <code>gamma=2.0</code> để giảm sự chú ý vào các mẫu dễ đoán, kết hợp với bộ trọng số tỷ lệ nghịch (từ Scikit-Learn) để "ép" mạng nơ-ron phải học kỹ lớp thiểu số (Objective).</td>
         </tr>
       </tbody>
     </table></div>
@@ -495,10 +495,10 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
       Hệ thống không chỉ đánh giá qua con số Accuracy đơn thuần, mà cung cấp một góc nhìn 360 độ về vòng đời mô hình:
     </p>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li><strong>Hiệu năng học (Metrics):</strong> Accuracy, Macro F1-Score, Precision, Recall và Confusion Matrix để soi lỗi phân loại chéo giữa các nhãn.</li>
-      <li><strong>Phân tích lỗi (Error Analysis):</strong> Trích xuất tự động danh sách các câu dự đoán sai có mức độ tự tin (Confidence Score) cao nhất ra file CSV để chuyên gia phân tích ngữ nghĩa.</li>
-      <li><strong>Giải thích XAI (Explainable AI):</strong> Kết hợp <code>LIME</code> (trực quan hộp đen) và <code>Captum Integrated Gradients</code> (nội soi dòng chảy đạo hàm hộp trắng) để giải thích từ khóa nào quyết định nhãn y khoa.</li>
-      <li><strong>Đánh đổi kỹ thuật (Efficiency Trade-off):</strong> Đo đạc dung lượng Model (MB) và thời gian suy luận (Inference Time) để đánh giá tính khả thi khi triển khai (Deploy) thực tế.</li>
+      <li><strong>Metrics:</strong> Accuracy, Macro F1-Score, Precision, Recall và Confusion Matrix để soi lỗi phân loại chéo giữa các nhãn.</li>
+      <li><strong>Error Analysis:</strong> Trích xuất tự động danh sách các câu dự đoán sai có mức độ tự tin cao nhất ra file CSV để chuyên gia phân tích ngữ nghĩa.</li>
+      <li><strong>Explainable AI:</strong> Kết hợp <code>LIME</code> và <code>Captum Integrated Gradients</code> để giải thích từ khóa nào quyết định nhãn y khoa.</li>
+      <li><strong>Efficiency Trade-off:</strong> Đo đạc dung lượng Model và thời gian suy luận để đánh giá tính khả thi khi triển khai thực tế.</li>
     </ul>
   </div>
 </div></section>
@@ -508,7 +508,7 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">4.1 Đánh giá Đánh đổi Hiệu quả (Efficiency Trade-off)</h3>
-    <p style="color:var(--muted);line-height:1.8">So sánh tương quan giữa Tốc độ suy luận (Inference Time), Kích thước mô hình (Model Size) và Độ chính xác (Accuracy). DistilBERT cho thấy sự cân bằng tốt nhất cho môi trường Production.</p>
+    <p style="color:var(--muted);line-height:1.8">So sánh tương quan giữa tốc độ suy luận, kích thước mô hình và độ chính xác. DistilBERT cho thấy sự cân bằng tốt nhất cho môi trường Production.</p>
     <div style="text-align: center; margin-top: 16px;">
       <img src="./result/Efficiency_Tradeoffs.png" alt="Biểu đồ Trade-off" class="img-fluid" onerror="this.style.display='none'">
     </div>
@@ -524,9 +524,9 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   <div class="glass" style="padding:24px">
     <h3 class="sub" style="margin-top:0">4.3 Kết luận Tổng thể</h3>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li><strong>BERT_Full</strong> đạt hiệu năng đỉnh cao nhất nhờ kiến trúc Transformer và Fine-tune toàn bộ trọng số.</li>
-      <li><strong>Focal Loss</strong> hoàn thành xuất sắc nhiệm vụ cứu vãn lớp thiểu số (Objective), thể hiện rõ qua sự tăng trưởng của chỉ số Macro F1.</li>
-      <li>Kỹ thuật <strong>Đóng băng (Freeze)</strong> thất bại toàn diện do đặc trưng của bộ dữ liệu gốc không khớp với văn bản y khoa.</li>
+      <li><strong>BERT_Full</strong> đạt hiệu năng cao nhất nhờ kiến trúc Transformer và Fine-tune toàn bộ trọng số.</li>
+      <li><strong>Focal Loss</strong> hoàn thành nhiệm vụ vá lớp thiểu số (Objective), thể hiện rõ qua sự tăng trưởng của chỉ số Macro F1.</li>
+      <li><strong>Freeze</strong> có kết quả kém</li>
     </ul>
   </div>
 </div></section>
