@@ -339,7 +339,7 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <h3 class="sub" style="margin-top:0">1.7 Kết luận phần EDA</h3>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
       <li>Dữ liệu có 5 nhãn cấu trúc với phân bố không đồng đều</li>
-      <li>Objective là lớp thiểu số nghiêm trọng nhất (chỉ 8%)</li>
+      <li>Objective là lớp thiểu số nghiêm trọng nhất (chỉ khoảng 8%)</li>
       <li>Cần áp dụng Focal Loss để cải thiện Recall cho lớp Objective</li>
       <li>BERT cần giữ stopwords để phục vụ cơ chế Attention</li>
     </ul>
@@ -351,45 +351,49 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   <h2 class="stitle">PHẦN 2: CHUẨN BỊ DATASET, DATALOADER VÀ AUGMENTATION</h2>
   
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">2.1 Xây dựng Dataset Class</h3>
+    <h3 class="sub" style="margin-top:0">2.1 Pipeline Dữ liệu (HuggingFace Datasets)</h3>
     <p style="color:var(--muted);line-height:1.8">
-      Class <code>PubMedDataset</code> kế thừa từ <code>torch.utils.data.Dataset</code>. Sử dụng Hugging Face Tokenizer để encode văn bản, xử lý padding và attention mask tự động.
+      Thay vì sử dụng <code>torch.utils.data.Dataset</code> truyền thống, hệ thống tận dụng sức mạnh của <strong>HuggingFace Datasets</strong> để tải và xử lý luồng (streaming) dữ liệu. Dữ liệu được xử lý song song qua hàm <code>.map()</code> và tự động chuyển đổi sang định dạng Tensor bằng lệnh <code>set_format(type="torch")</code>, giúp tối ưu hóa tối đa RAM hệ thống.
     </p>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">2.2 Tokenization</h3>
+    <h3 class="sub" style="margin-top:0">2.2 Chiến lược Tokenization (Đồng nhất hóa)</h3>
     <div class="tw"><table>
-      <thead><tr><th>Model</th><th>Tokenizer</th><th class="n">Vocab Size</th><th class="n">Max Length</th></tr></thead>
+      <thead><tr><th>Kiến trúc</th><th>Hệ Tokenizer</th><th class="n">Vocab Size</th><th class="n">Max Length</th></tr></thead>
       <tbody>
-        <tr><td>BERT</td><td>bert-base-uncased</td><td class="n">30,522</td><td class="n">128</td></tr>
-        <tr><td>DistilBERT</td><td>distilbert-base-uncased</td><td class="n">30,522</td><td class="n">128</td></tr>
-        <tr><td>Bi-LSTM</td><td>Custom WordPiece</td><td class="n">30,522</td><td class="n">128</td></tr>
+        <tr><td>BERT</td><td>bert-base-uncased (WordPiece)</td><td class="n">30,522</td><td class="n">128</td></tr>
+        <tr><td>DistilBERT</td><td>distilbert-base-uncased (WordPiece)</td><td class="n">30,522</td><td class="n">128</td></tr>
+        <tr><td>Bi-LSTM</td><td>bert-base-uncased (WordPiece)</td><td class="n">30,522</td><td class="n">128</td></tr>
       </tbody>
     </table></div>
-  </div>
-
-  <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">2.3 Data Augmentation</h3>
-    <p style="color:var(--muted);line-height:1.8">
-      Áp dụng kỹ thuật <strong>Random Word Deletion</strong>: Ngẫu nhiên xóa một số từ trong câu huấn luyện với tỷ lệ 15%. Kỹ thuật này giúp mô hình tăng tính bền bỉ (robustness) và chống overfitting vào từ khóa cụ thể.
+    <p style="color:var(--muted);margin-top:16px;font-size:.9rem">
+      <strong>Biện luận:</strong> Việc ép mô hình Bi-LSTM sử dụng chung bộ Tokenizer của BERT giúp tạo ra môi trường Baseline công bằng tuyệt đối. Mọi chênh lệch về hiệu năng (Accuracy/F1) giữa các kịch bản sẽ phản ánh đúng 100% sức mạnh cấu trúc lõi của mạng Nơ-ron.
     </p>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">2.4 Class Weights</h3>
+    <h3 class="sub" style="margin-top:0">2.3 Data Augmentation (Làm giàu dữ liệu)</h3>
     <p style="color:var(--muted);line-height:1.8">
-      Tính toán trọng số cho từng lớp: Objective có trọng số cao nhất (~3.4x so với Methods) để bù đắp cho sự thiếu hụt mẫu.
+      Áp dụng kỹ thuật <strong>Random Word Deletion</strong> tự phát triển: Xóa ngẫu nhiên đúng 1 từ trong các câu huấn luyện có độ dài lớn hơn 5 từ. 
+      <br><em>Mục đích:</em> Kỹ thuật này hoạt động như một cơ chế Regularization tự nhiên, ép mô hình (đặc biệt là Transformer) không được quá phụ thuộc (overfit) vào một từ khóa duy nhất để dự đoán nhãn, qua đó tăng tính bền bỉ (robustness) trên tập Test.
+    </p>
+  </div>
+
+  <div class="glass" style="padding:24px;margin-bottom:18px">
+    <h3 class="sub" style="margin-top:0">2.4 Xử lý Mất cân bằng (Class Weights)</h3>
+    <p style="color:var(--muted);line-height:1.8">
+      Hệ thống tích hợp <code>compute_class_weight('balanced', ...)</code> từ thư viện Scikit-Learn. Thuật toán tự động cấp trọng số phạt tỷ lệ nghịch với số lượng mẫu. Kết quả: Lớp <strong>Objective</strong> nhận được trọng số cao nhất (gấp khoảng 3.4 lần lớp Methods) để ép mô hình phải chú ý học các đặc trưng hiếm.
     </p>
   </div>
 
   <div class="glass" style="padding:24px">
     <h3 class="sub" style="margin-top:0">2.5 DataLoader Configuration</h3>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li>Batch size: 32</li>
-      <li>Shuffle: True cho train, False cho val</li>
-      <li>Max length: 55 tokens</li>
-      <li>Padding: Max length với truncation</li>
+      <li><strong>Batch size:</strong> 32 (Cân bằng giữa tốc độ cập nhật Gradient và giới hạn VRAM)</li>
+      <li><strong>Padding Strategy:</strong> <code>max_length</code> (Bù 0 cho các câu ngắn)</li>
+      <li><strong>Truncation:</strong> Cắt bỏ triệt để phần dư thừa vượt quá 128 tokens</li>
+      <li><strong>Tích hợp:</strong> Các tham số này được quản lý tự động, chặt chẽ thông qua <code>HuggingFace Trainer</code> API (thay cho vòng lặp train thủ công).</li>
     </ul>
   </div>
 </div></section>
