@@ -557,14 +557,168 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
       </div>
     </div>
 
-    <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
-      <h4 style="color: var(--sec); font-size: 0.95rem; margin: 0; min-width: 150px;">📂 Tải File Dữ liệu:</h4>
-      <a href="./result/Result/BERT_Full_error_analysis.csv" target="_blank" class="btn btn-ghost" style="flex: 1; text-align: center; border-color: var(--gold); padding: 10px;">⚠️ Tải CSV Phân tích lỗi (Error Analysis)</a>
-      <a href="./result/Result/BERT_Full_classification_report.csv" target="_blank" class="btn btn-ghost" style="flex: 1; text-align: center; border-color: var(--pri); padding: 10px;">📊 Tải CSV Báo cáo Phân loại (Classification)</a>
-    </div>
+    <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; margin-top: 20px; grid-column: 1 / -1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h4 style="color: var(--sec); font-size: 0.95rem; margin: 0 0 4px 0;">4. Phân tích lỗi (Top 5 Confident Errors)</h4>
+            <p style="color: var(--muted); font-size: 0.85rem; margin: 0;">Các câu bị mô hình phân loại sai nhưng lại có độ tự tin (Confidence) cực kỳ cao.</p>
+          </div>
+          <a href="./result/BERT_Full_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold); padding: 8px 16px; font-size: 0.85rem;">
+            Tải toàn bộ file CSV
+          </a>
+        </div>
+
+        <div style="overflow-x: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; min-width: 800px;">
+            <thead style="background: rgba(255,255,255,0.05); color: var(--sec);">
+              <tr>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); width: 60%;">Văn bản nội dung (Text)</th>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">Nhãn Thực tế</th>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">Dự đoán Sai</th>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">Confidence</th>
+              </tr>
+            </thead>
+            <tbody style="color: #ddd;">
+              
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); line-height: 1.6;">"Carvedilol significantly reduced HVPG from @ mm Hg ( SD , @ ) to @ mm Hg ( SD , @ ) after @ minutes and to @ mm Hg ( SD , @ ) after @ days ( P < @ ) ."</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(124,156,255,0.15); color: #7c9cff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">METHODS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(251,113,133,0.15); color: #fb7185; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">RESULTS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--gold); font-weight: bold;">0.9967</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); line-height: 1.6;">"Nebivolol reduced HVPG from @ mm Hg ( SD , @ ) to @ mm Hg ( SD , @ ) and @ mm Hg ( SD , @ ) , respectively ( P < @ ) ."</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(124,156,255,0.15); color: #7c9cff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">METHODS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(251,113,133,0.15); color: #fb7185; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">RESULTS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--gold); font-weight: bold;">0.9967</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); line-height: 1.6;">"Compared with OP , PKEP was associated with less perioperative hemoglobin decrease , shorter catheterization time... ( p = @ ) ."</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(167,139,250,0.15); color: #a855f7; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">CONCLUSIONS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(251,113,133,0.15); color: #fb7185; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">RESULTS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--gold); font-weight: bold;">0.9966</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); line-height: 1.6;">"VO@ pic increased after AT ( @ @ vs @ @ mL O@/min/kg , P < @ ) and remained unchanged after CT ( @ @ vs @ @ , P = NS ) ."</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(124,156,255,0.15); color: #7c9cff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">METHODS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(251,113,133,0.15); color: #fb7185; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">RESULTS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--gold); font-weight: bold;">0.9965</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); line-height: 1.6;">"Additionally , AST resulted in significantly fewer vessel-to-air exposure events ( P < @ ) and unprotected sharps exposures ( P < @ ) ."</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(167,139,250,0.15); color: #a855f7; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">CONCLUSIONS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);"><span style="background: rgba(251,113,133,0.15); color: #fb7185; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">RESULTS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--gold); font-weight: bold;">0.9964</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    
+    <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; margin-top: 24px; grid-column: 1 / -1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <h4 style="color: var(--pri); font-size: 0.95rem; margin: 0 0 4px 0;">📊 6. Báo cáo Phân loại (Classification Report)</h4>
+            <p style="color: var(--muted); font-size: 0.85rem; margin: 0;">Đánh giá chi tiết hiệu năng của mô hình trên từng nhãn y khoa (Tập Validation).</p>
+          </div>
+          <a href="./result/BERT_Full_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri); padding: 8px 16px; font-size: 0.85rem;">
+            📥 Tải toàn bộ file CSV
+          </a>
+        </div>
+
+        <div style="overflow-x: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center; min-width: 600px;">
+            <thead style="background: rgba(255,255,255,0.05); color: var(--sec);">
+              <tr>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: left;">Nhãn</th>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">Precision</th>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">Recall</th>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">F1-Score</th>
+                <th style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);">Số lượng</th>
+              </tr>
+            </thead>
+            <tbody style="color: #ddd;">
+              
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); text-align: left;"><span style="background: rgba(45,212,191,0.15); color: #2dd4bf; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">BACKGROUND</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">61.48%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">81.13%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: 600;">69.95%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--muted);">2,925</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); text-align: left;"><span style="background: rgba(167,139,250,0.15); color: #a855f7; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">CONCLUSIONS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">88.01%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">79.31%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: 600;">83.43%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--muted);">4,582</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); text-align: left;"><span style="background: rgba(124,156,255,0.15); color: #7c9cff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">METHODS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: #4ade80;">93.94%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: #4ade80;">94.87%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: bold; color: #4ade80;">94.40%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--muted);">9,948</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); text-align: left;"><span style="background: rgba(250,204,21,0.15); color: #facc15; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">OBJECTIVE</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">78.07%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: #fb7185;">55.72%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: 600; color: #fb7185;">65.03%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--muted);">2,376</td>
+              </tr>
+
+              <tr>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); text-align: left;"><span style="background: rgba(251,113,133,0.15); color: #fb7185; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">RESULTS</span></td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: #4ade80;">91.94%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: #4ade80;">92.87%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: bold; color: #4ade80;">92.40%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--muted);">9,841</td>
+              </tr>
+
+              <tr style="background: rgba(255,255,255,0.03);">
+                <td colspan="5" style="padding: 4px;"></td>
+              </tr>
+
+              <tr style="background: rgba(255,255,255,0.03);">
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); text-align: left; font-weight: bold;">Accuracy</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">-</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">-</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: bold; color: var(--pri); font-size: 0.9rem;">87.31%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--muted);">29,672</td>
+              </tr>
+
+              <tr style="background: rgba(255,255,255,0.03);">
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); text-align: left; font-weight: bold;">Macro Avg</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">82.69%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02);">80.78%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); font-weight: bold;">81.04%</td>
+                <td style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.02); color: var(--muted);">29,672</td>
+              </tr>
+
+              <tr style="background: rgba(255,255,255,0.03);">
+                <td style="padding: 12px 16px; border-bottom: none; text-align: left; font-weight: bold;">Weighted Avg</td>
+                <td style="padding: 12px 16px; border-bottom: none;">87.89%</td>
+                <td style="padding: 12px 16px; border-bottom: none;">87.31%</td>
+                <td style="padding: 12px 16px; border-bottom: none; font-weight: bold;">87.28%</td>
+                <td style="padding: 12px 16px; border-bottom: none; color: var(--muted);">29,672</td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
 
     <div style="margin-top: 24px;">
-      <h4 style="color: var(--rose); font-size: 1rem; margin-bottom: 10px;">4. Captum Integrated Gradients</h4>
+      <h4 style="color: var(--rose); font-size: 1rem; margin-bottom: 10px;">5. Captum Integrated Gradients</h4>
       <p style="color: var(--muted); font-size: 0.9rem;"<strong>Trực quan hóa giá trị phân bổ đặc trưng (Attribution Scores) bằng cách truy vết dòng gradient từ logit dự đoán <strong>[Background]</strong> ngược về không gian Embedding. Màu xanh lá biểu thị các token có đóng góp tích cực (tăng xác suất dự đoán), trong khi màu đỏ biểu thị các token có tác động tiêu cực (suy giảm độ tự tin của mô hình).
       
       <div class="captum-wrapper">
@@ -595,9 +749,9 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
 
       <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
         <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 4px;">Dữ liệu Báo cáo & Nội soi</h4>
-        <a href="./result/Result/captum_explanation_Bi-LSTM_Full.html" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--rose);">🔬 4. Xem HTML Nội soi Captum</a>
-        <a href="./result/Result/Bi-LSTM_Full_error_analysis.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--gold);">⚠️ 5. Tải CSV Phân tích lỗi</a>
-        <a href="./result/Result/Bi-LSTM_Full_classification_report.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--pri);">📊 6. Tải CSV Báo cáo Phân loại</a>
+        <a href="./result/Result/captum_explanation_Bi-LSTM_Full.html" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--rose);">4. Xem HTML Nội soi Captum</a>
+        <a href="./result/Result/Bi-LSTM_Full_error_analysis.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--gold);">5. Tải CSV Phân tích lỗi</a>
+        <a href="./result/Result/Bi-LSTM_Full_classification_report.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--pri);">6. Tải CSV Báo cáo Phân loại</a>
       </div>
 
     </div>
@@ -623,23 +777,23 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     
     <div class="compact-grid">
       <div class="compact-img-box">
-        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <div class="compact-title">Lịch sử Huấn luyện</div>
         <img src="./result/Result/BERT_Freeze_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🎯 Confusion Matrix</div>
+        <div class="compact-title">Confusion Matrix</div>
         <img src="./result/Result/BERT_Freeze_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🔍 LIME Explanation</div>
+        <div class="compact-title">LIME Explanation</div>
         <img src="./result/Result/lime_explanation_BERT_Freeze.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
     </div>
 
     <div class="compact-links">
-      <a href="./result/Result/captum_explanation_BERT_Freeze.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
-      <a href="./result/Result/BERT_Freeze_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
-      <a href="./result/Result/BERT_Freeze_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+      <a href="./result/Result/captum_explanation_BERT_Freeze.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">Xem HTML Captum</a>
+      <a href="./result/Result/BERT_Freeze_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">CSV Phân tích lỗi</a>
+      <a href="./result/Result/BERT_Freeze_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">CSV Classification</a>
     </div>
   </div>
 
@@ -647,22 +801,22 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <h3 class="sub" style="margin-top:0; color: #fff;">CASE: BERT_Full_Focal <span class="badge" style="float: right; background: rgba(255,255,255,0.1); color: #aaa;">Xử lý mất cân bằng</span></h3>
     <div class="compact-grid">
       <div class="compact-img-box">
-        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <div class="compact-title">Lịch sử Huấn luyện</div>
         <img src="./result/Result/BERT_Full_Focal_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🎯 Confusion Matrix</div>
+        <div class="compact-title">Confusion Matrix</div>
         <img src="./result/Result/BERT_Full_Focal_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🔍 LIME Explanation</div>
+        <div class="compact-title">LIME Explanation</div>
         <img src="./result/Result/lime_explanation_BERT_Full_Focal.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
     </div>
     <div class="compact-links">
-      <a href="./result/Result/captum_explanation_BERT_Full_Focal.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
-      <a href="./result/Result/BERT_Full_Focal_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
-      <a href="./result/Result/BERT_Full_Focal_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+      <a href="./result/Result/captum_explanation_BERT_Full_Focal.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">Xem HTML Captum</a>
+      <a href="./result/Result/BERT_Full_Focal_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">CSV Phân tích lỗi</a>
+      <a href="./result/Result/BERT_Full_Focal_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">CSV Classification</a>
     </div>
   </div>
 
@@ -670,22 +824,22 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <h3 class="sub" style="margin-top:0; color: #fff;">CASE: Bi-LSTM_Focal</h3>
     <div class="compact-grid">
       <div class="compact-img-box">
-        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <div class="compact-title">Lịch sử Huấn luyện</div>
         <img src="./result/Result/Bi-LSTM_Focal_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🎯 Confusion Matrix</div>
+        <div class="compact-title">Confusion Matrix</div>
         <img src="./result/Result/Bi-LSTM_Focal_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🔍 LIME Explanation</div>
+        <div class="compact-title">LIME Explanation</div>
         <img src="./result/Result/lime_explanation_Bi-LSTM_Focal.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
     </div>
     <div class="compact-links">
-      <a href="./result/Result/captum_explanation_Bi-LSTM_Focal.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
-      <a href="./result/Result/Bi-LSTM_Focal_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
-      <a href="./result/Result/Bi-LSTM_Focal_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+      <a href="./result/Result/captum_explanation_Bi-LSTM_Focal.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">Xem HTML Captum</a>
+      <a href="./result/Result/Bi-LSTM_Focal_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">CSV Phân tích lỗi</a>
+      <a href="./result/Result/Bi-LSTM_Focal_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">CSV Classification</a>
     </div>
   </div>
 
@@ -693,22 +847,22 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <h3 class="sub" style="margin-top:0; color: #fff;">CASE: BERT_Augmented <span class="badge" style="float: right; background: rgba(255,255,255,0.1); color: #aaa;">Làm giàu dữ liệu</span></h3>
     <div class="compact-grid">
       <div class="compact-img-box">
-        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <div class="compact-title">Lịch sử Huấn luyện</div>
         <img src="./result/Result/BERT_Augmented_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🎯 Confusion Matrix</div>
+        <div class="compact-title">Confusion Matrix</div>
         <img src="./result/Result/BERT_Augmented_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🔍 LIME Explanation</div>
+        <div class="compact-title">LIME Explanation</div>
         <img src="./result/Result/lime_explanation_BERT_Augmented.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
     </div>
     <div class="compact-links">
-      <a href="./result/Result/captum_explanation_BERT_Augmented.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
-      <a href="./result/Result/BERT_Augmented_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
-      <a href="./result/Result/BERT_Augmented_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+      <a href="./result/Result/captum_explanation_BERT_Augmented.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">Xem HTML Captum</a>
+      <a href="./result/Result/BERT_Augmented_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">CSV Phân tích lỗi</a>
+      <a href="./result/Result/BERT_Augmented_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">CSV Classification</a>
     </div>
   </div>
 
@@ -716,22 +870,22 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <h3 class="sub" style="margin-top:0; color: #fff;">CASE: Bi-LSTM_Augmented</h3>
     <div class="compact-grid">
       <div class="compact-img-box">
-        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <div class="compact-title">Lịch sử Huấn luyện</div>
         <img src="./result/Result/Bi-LSTM_Augmented_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🎯 Confusion Matrix</div>
+        <div class="compact-title">Confusion Matrix</div>
         <img src="./result/Result/Bi-LSTM_Augmented_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🔍 LIME Explanation</div>
+        <div class="compact-title">LIME Explanation</div>
         <img src="./result/Result/lime_explanation_Bi-LSTM_Augmented.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
     </div>
     <div class="compact-links">
-      <a href="./result/Result/captum_explanation_Bi-LSTM_Augmented.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
-      <a href="./result/Result/Bi-LSTM_Augmented_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
-      <a href="./result/Result/Bi-LSTM_Augmented_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+      <a href="./result/Result/captum_explanation_Bi-LSTM_Augmented.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">Xem HTML Captum</a>
+      <a href="./result/Result/Bi-LSTM_Augmented_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">CSV Phân tích lỗi</a>
+      <a href="./result/Result/Bi-LSTM_Augmented_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">CSV Classification</a>
     </div>
   </div>
 
@@ -739,22 +893,22 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <h3 class="sub" style="margin-top:0; color: #fff;">CASE: DistilBERT_Small <span class="badge" style="float: right; background: rgba(255,255,255,0.1); color: #aaa;">Mô hình tối ưu tốc độ</span></h3>
     <div class="compact-grid">
       <div class="compact-img-box">
-        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <div class="compact-title">Lịch sử Huấn luyện</div>
         <img src="./result/Result/DistilBERT_Small_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🎯 Confusion Matrix</div>
+        <div class="compact-title">Confusion Matrix</div>
         <img src="./result/Result/DistilBERT_Small_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
       <div class="compact-img-box">
-        <div class="compact-title">🔍 LIME Explanation</div>
+        <div class="compact-title">LIME Explanation</div>
         <img src="./result/Result/lime_explanation_DistilBERT_Small.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
       </div>
     </div>
     <div class="compact-links">
-      <a href="./result/Result/captum_explanation_DistilBERT_Small.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
-      <a href="./result/Result/DistilBERT_Small_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
-      <a href="./result/Result/DistilBERT_Small_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+      <a href="./result/Result/captum_explanation_DistilBERT_Small.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">Xem HTML Captum</a>
+      <a href="./result/Result/DistilBERT_Small_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">CSV Phân tích lỗi</a>
+      <a href="./result/Result/DistilBERT_Small_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">CSV Classification</a>
     </div>
   </div>
 
