@@ -24,7 +24,6 @@ def clean_text(text, remove_stop=False):
     return text
 
 def load_and_tokenize_data(model_name="bert-base-uncased", augment=False):
-    print("Đang tải dữ liệu từ Hugging Face Hub (armanc/pubmed-rct20k)...")
     ds = load_dataset("armanc/pubmed-rct20k")
     
     tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -32,7 +31,6 @@ def load_and_tokenize_data(model_name="bert-base-uncased", augment=False):
     label_encoder = LabelEncoder()
     label_encoder.fit(ds['train']['label'])
     num_classes = len(label_encoder.classes_)
-    print(f"Đã tìm thấy {num_classes} nhãn: {label_encoder.classes_}")
 
     os.makedirs('../result', exist_ok=True)
     with open('../result/label_encoder.pkl', 'wb') as f:
@@ -53,7 +51,6 @@ def load_and_tokenize_data(model_name="bert-base-uncased", augment=False):
         tokenized['labels'] = label_encoder.transform(examples['label']).tolist()
         return tokenized
     
-    print("\nTiến hành tiền xử lý và Tokenize dữ liệu")
     train_dataset = ds['train'].map(lambda x: preprocess_function(x, is_train=True), batched=True, remove_columns=['label'])
 
     val_dataset = ds['validation'].map(lambda x: preprocess_function(x, is_train=False), batched=True, remove_columns=['label'])
