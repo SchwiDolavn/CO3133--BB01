@@ -9,6 +9,7 @@ import os
 def explain_prediction_lime(text, model, tokenizer, label_encoder, scenario_name="model", device="cpu"):
     model.to(device)
     model.eval()
+
     class_names = list(label_encoder.classes_)
     explainer = LimeTextExplainer(class_names=class_names)
     
@@ -33,7 +34,21 @@ def explain_prediction_lime(text, model, tokenizer, label_encoder, scenario_name
 
 def explain_prediction_captum(text, model, tokenizer, label_encoder, scenario_name, model_type, device="cpu"):
     model.to(device)
-    model.eval()
+
+    if 'Bi-LSTM' in model_type:
+        model.train()
+        for m in model.modules():
+            if isinstance(m, torch.nn.Dropout):
+                m.eval()
+    else:
+        model.eval()
+    
+    for param in model.parameters():
+        param.requires_grad = True
+        
+    def custom_forward(input_ids, attention_mask):
+        outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+        return outputs.logits
 
     inputs = tokenizer(text, return_tensors="pt", max_length=128, truncation=True)
     input_ids = inputs["input_ids"].to(device)
@@ -51,9 +66,9 @@ def explain_prediction_captum(text, model, tokenizer, label_encoder, scenario_na
         return out.logits if hasattr(out, 'logits') else out[0]
 
     if 'DistilBERT' in model_type:
-        embed_layer = model.distilbert.embeddings.word_embeddings
+        embed_layer = model.distilbert.embeddings
     elif 'BERT' in model_type:
-        embed_layer = model.bert.embeddings.word_embeddings
+        embed_layer = model.bert.embeddings
     elif 'Bi-LSTM' in model_type:
         embed_layer = model.embedding
     else:

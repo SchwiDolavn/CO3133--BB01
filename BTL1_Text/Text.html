@@ -48,7 +48,7 @@ section{padding:20px 0}
 .pipe-card .pd{color:var(--muted);font-size:.84rem;line-height:1.65}
 .pipe-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
 .ptag{padding:5px 10px;border-radius:999px;font-size:.74rem;font-weight:700;line-height:1}
-.ptag.b{background:linear-gradient(135deg,#365ed8,#4b7ff);color:#fff}
+.ptag.b{background:linear-gradient(135deg,#365ed8,#aef4d1af);color:#fff}
 .ptag.t{background:linear-gradient(135deg,#178f87,#1fb5ac);color:#fff}
 .ptag.g{background:linear-gradient(135deg,#d18a1f,#ffb648);color:#fff}
 .ptag.o{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#c6d0ff}
@@ -97,7 +97,12 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   <div class="glass hero-main">
     <div class="badge">BÁO CÁO CHI TIẾT</div>
     <h1>PubMed RCT 20k — Phân loại văn bản y khoa</h1>
-    <p>Báo cáo toàn diện gồm 5 phần: (1) EDA & Phân tích dữ liệu, (2) Dataset & Augmentation, (3) Xây dựng & Huấn luyện mô hình, (4) Kết quả thực nghiệm, (5) Các phần mở rộng.</p>
+    <p>Báo cáo toàn diện gồm 5 phần: </p>
+    <p>  (1) EDA & Phân tích dữ liệu, </p>
+    <p>  (2) Dataset & Augmentation, </p>
+    <p>  (3) Xây dựng & Huấn luyện mô hình, </p>
+    <p>  (4) Kết quả thực nghiệm, </p>
+    <p>  (5) Các phần mở rộng.</p>
     <div class="hero-actions">
       <a class="btn btn-pri" href="#results">Xem kết quả</a>
       <a class="btn btn-ghost" href="https://github.com/SchwiDolavn/CO3133--BB01/tree/main/BTL1_Text" target="_blank">GitHub</a>
@@ -123,35 +128,215 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">1.2 Phân tích phân bố dữ liệu</h3>
-    <div class="tw"><table>
-      <thead><tr><th>Nhãn</th><th class="n">Số lượng</th><th class="n">Tỷ lệ</th><th class="n">Mã</th></tr></thead>
-      <tbody>
-        <tr><td>Background</td><td class="n">~45,000</td><td class="n">~22%</td><td class="n">0</td></tr>
-        <tr><td>Objective</td><td class="n">~15,000</td><td class="n">~8%</td><td class="n">1</td></tr>
-        <tr><td>Methods</td><td class="n">~55,000</td><td class="n">~27%</td><td class="n">2</td></tr>
-        <tr><td>Results</td><td class="n">~50,000</td><td class="n">~25%</td><td class="n">3</td></tr>
-        <tr><td>Conclusions</td><td class="n">~35,000</td><td class="n">~18%</td><td class="n">4</td></tr>
-      </tbody>
-    </table></div>
+    <h3 class="sub" style="margin-top:0">1.2 Phân bố các tập dữ liệu</h3>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 32px; width: 100%;">
+  
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/TrainValidTest.png" 
+             alt="Biểu đồ phân bố nhãn PubMed" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic; letter-spacing: 0.5px;">
+          Hình 1: Trực quan hóa số lượng mẫu giữa các tập 
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="glass" style="padding:24px;margin-bottom:18px">
+    <h3 class="sub" style="margin-top:0">1.3 Phân tích phân bố dữ liệu</h3>
+    
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Nhãn</th><th class="n">Số lượng</th><th class="n">Tỷ lệ</th><th class="n">Mã</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Background</td><td class="n">~45,000</td><td class="n">~22%</td><td class="n">0</td></tr>
+          <tr><td>Objective</td><td class="n">~15,000</td><td class="n">~8%</td><td class="n">1</td></tr>
+          <tr><td>Methods</td><td class="n">~55,000</td><td class="n">~27%</td><td class="n">2</td></tr>
+          <tr><td>Results</td><td class="n">~50,000</td><td class="n">~25%</td><td class="n">3</td></tr>
+          <tr><td>Conclusions</td><td class="n">~35,000</td><td class="n">~18%</td><td class="n">4</td></tr>
+        </tbody>
+      </table>
+    </div>
+    
+    
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 32px; width: 100%;">
+  
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/Class.png" 
+             alt="Biểu đồ phân bố nhãn PubMed" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic; letter-spacing: 0.5px;">
+          Hình 1: Trực quan hóa số lượng mẫu giữa các nhãn lớp
+        </p>
+      </div>
+
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/Class1.png" 
+             alt="Tỷ lệ phân bổ dữ liệu" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic; letter-spacing: 0.5px;">
+          Hình 2: Trực quan hóa tỷ lệ phần trăm giữa các nhãn lớp
+        </p>
+      </div>
+
+    </div>
+
     <p style="color:var(--muted);margin-top:16px;font-size:.9rem">
-      <strong>Nhận xét:</strong> Dữ liệu bị mất cân bằng nghiêm trọng. Objective chỉ chiếm 8% trong khi Methods chiếm 27%. Đây là thách thức chính của bài toán.
+      <strong>Nhận xét:</strong> Dữ liệu bị mất cân bằng nghiêm trọng. Lớp <strong>Objective</strong> chỉ chiếm 8% trong khi <strong>Methods</strong> chiếm tới 27%. Đây là thách thức chính, đòi hỏi áp dụng Focal Loss để tối ưu hóa Recall cho các lớp thiểu số thay vì các kỹ thuật lấy mẫu thô sơ.
     </p>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">1.3 Tiền xử lý văn bản</h3>
-    <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li>Chuyển về chữ thường (lowercase)</li>
-      <li>Loại bỏ dấu câu thừa</li>
-      <li>Quy chuẩn ký tự @ thành "number" để bảo toàn giá trị ngữ nghĩa</li>
-      <li>Loại bỏ stopwords cho Bi-LSTM, giữ nguyên cho BERT</li>
-      <li>Tokenize với WordPiece, max_length=55</li>
-    </ul>
+    <h3 class="sub" style="margin-top:0">1.4 Phân tích Đặc trưng Từ vựng (Lexical Analysis)</h3>
+    <p style="color:var(--muted);line-height:1.8">
+      Trước khi đưa vào mô hình, việc phân tích tần suất từ vựng giúp chúng ta hiểu rõ "ngôn ngữ" của tập dữ liệu. Các biểu đồ dưới đây được kết xuất sau khi đã dọn dẹp sơ bộ (loại bỏ stop words và dấu câu).
+    </p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 24px; width: 100%;">
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/Top20Words.png" 
+             alt="Top 20 từ phổ biến nhất" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 3: Top 20 từ vựng xuất hiện nhiều nhất trên toàn bộ tập dữ liệu (chủ yếu là các thuật ngữ y khoa chung).
+        </p>
+      </div>
+
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/WordCloud_Classes2.png" 
+             alt="WordCloud cho từng nhãn" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 4: WordCloud nhãn Background.
+        </p>
+      </div>
+
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/WordCloud_Classes3.png" 
+             alt="WordCloud cho từng nhãn" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 5: WordCloud nhãn Conclusions.
+        </p>
+      </div>
+
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/WordCloud_Classes4.png" 
+             alt="WordCloud cho từng nhãn" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 6: WordCloud nhãn Methods.
+        </p>
+      </div>
+
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/WordCloud_Classes5.png" 
+             alt="WordCloud cho từng nhãn" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 7: WordCloud nhãn Objective.
+        </p>
+      </div>
+      
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/WordCloud_Classes6.png" 
+             alt="WordCloud cho từng nhãn" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 8: WordCloud nhãn Results.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="glass" style="padding:24px;margin-bottom:18px">
+    <h3 class="sub" style="margin-top:0">1.5 Phân bố Độ dài câu & Phân phối Tích lũy (CDF)</h3>
+    <p style="color:var(--muted);line-height:1.8">
+      Để tối ưu hóa ma trận đầu vào cho mạng Nơ-ron (tránh Padding quá nhiều gây lãng phí RAM, hoặc Truncation làm mất dữ liệu), chúng ta cần khảo sát độ dài trung bình của các câu trong Abstract.
+    </p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 24px; width: 100%;">
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/Sentence_Length_Hist.png" 
+             alt="Histogram độ dài câu" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 5: Phân bố độ dài câu (tính bằng số lượng từ). Phân phối có dạng lệch phải (Right-skewed).
+        </p>
+      </div>
+
+      <div style="flex: 1; min-width: 300px; max-width: 500px; text-align: center;">
+        <img src="./result/EDA/Sentence_Length_CDF.png" 
+             alt="Phân phối tích lũy CDF" 
+             style="width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15);"
+             onerror="this.parentElement.style.display='none'">
+        <p style="color: var(--muted); font-size: 0.85rem; margin-top: 12px; font-style: italic;">
+          Hình 6: Đường phân phối tích lũy (CDF). Hơn 95% số câu có độ dài dưới 60 từ.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="glass" style="padding:24px;margin-bottom:18px">
+    <h3 class="sub" style="margin-top:0">1.6 Kỹ thuật Tiền xử lý văn bản (Text Preprocessing)</h3>
+    <p style="color:var(--muted);line-height:1.8">
+      Thay vì áp dụng chung một công thức, hệ thống phân nhánh logic tiền xử lý dựa trên đặc thù kiến trúc của từng loại mô hình:
+    </p>
+
+    <div class="tw" style="margin-top: 16px; margin-bottom: 20px;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">Bước xử lý</th>
+            <th>Mục đích</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Chuẩn hóa ký tự</strong></td>
+            <td>Chuyển <code>lowercase</code> và loại bỏ dấu câu thừa. Đặc biệt, quy chuẩn ký tự <code>@</code> thành chữ <code>number</code> (do bộ dữ liệu PubMed gốc che giấu các con số y khoa bằng ký hiệu @, việc chuyển đổi này giúp giữ nguyên ý nghĩa số lượng).</td>
+          </tr>
+          <tr>
+            <td><strong>Xử lý Stopwords</strong><br><span style="font-size: 0.8rem; font-weight: normal; color: var(--muted);">(Phân nhánh theo mô hình)</span></td>
+            <td>
+              <span style="color: var(--sec); font-weight: bold;">✔️ Dành cho Bi-LSTM:</span> Loại bỏ hoàn toàn Stopwords bằng NLTK. Giúp giảm nhiễu từ vựng, ép mạng RNN tập trung ghi nhớ các từ khóa y khoa cốt lõi.<br>
+              <span style="color: var(--rose); font-weight: bold;">❌ Dành cho BERT:</span> <strong>Giữ nguyên Stopwords</strong>. Mô hình Transformer cực kỳ phụ thuộc vào giới từ, liên từ để tính toán trọng số ngữ cảnh (Attention). Nếu xóa sẽ làm phá vỡ ngữ pháp câu.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Tokenization</strong></td>
+            <td>Sử dụng thuật toán băm từ phụ (WordPiece). Đã tinh chỉnh <code>max_length = 128</code> (thay vì 55) để bù trừ cho sự nở rộng của số lượng token sau khi tách sub-word, đảm bảo không bị mất mát thông tin ở đuôi câu.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box" style="margin-top: 16px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(124,156,255,0.3);">
+      <span class="lbl" style="color: var(--pri);">Ví dụ minh họa luồng xử lý (Before & After)</span>
+      <div class="val" style="font-family: Consolas, monospace; font-size: 0.88rem; line-height: 1.8;">
+        <span style="color: #fb7185; display: inline-block; width: 80px;">[Raw Text]</span> : A total of @ patients were randomized !<br>
+        <span style="color: #5eead4; display: inline-block; width: 80px;">[Bi-LSTM]</span>  : total number patients randomized <span style="color: var(--muted); font-style: italic;">(Đã xóa stopwords và dấu câu)</span><br>
+        <span style="color: #7c9cff; display: inline-block; width: 80px;">[BERT]</span>     : a total of number patients were randomized <span style="color: var(--muted); font-style: italic;">(Giữ nguyên cấu trúc ngữ pháp)</span>
+      </div>
+    </div>
   </div>
 
   <div class="glass" style="padding:24px">
-    <h3 class="sub" style="margin-top:0">1.4 Kết luận phần EDA</h3>
+    <h3 class="sub" style="margin-top:0">1.7 Kết luận phần EDA</h3>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
       <li>Dữ liệu có 5 nhãn cấu trúc với phân bố không đồng đều</li>
       <li>Objective là lớp thiểu số nghiêm trọng nhất (chỉ 8%)</li>
@@ -177,9 +362,9 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <div class="tw"><table>
       <thead><tr><th>Model</th><th>Tokenizer</th><th class="n">Vocab Size</th><th class="n">Max Length</th></tr></thead>
       <tbody>
-        <tr><td>BERT</td><td>bert-base-uncased</td><td class="n">30,522</td><td class="n">55</td></tr>
-        <tr><td>DistilBERT</td><td>distilbert-base-uncased</td><td class="n">30,522</td><td class="n">55</td></tr>
-        <tr><td>Bi-LSTM</td><td>Custom WordPiece</td><td class="n">10,000</td><td class="n">55</td></tr>
+        <tr><td>BERT</td><td>bert-base-uncased</td><td class="n">30,522</td><td class="n">128</td></tr>
+        <tr><td>DistilBERT</td><td>distilbert-base-uncased</td><td class="n">30,522</td><td class="n">128</td></tr>
+        <tr><td>Bi-LSTM</td><td>Custom WordPiece</td><td class="n">30,522</td><td class="n">128</td></tr>
       </tbody>
     </table></div>
   </div>
