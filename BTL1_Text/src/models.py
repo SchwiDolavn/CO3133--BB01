@@ -34,7 +34,6 @@ class BiLSTM_Model(nn.Module):
 
 def build_model_pytorch(model_type, num_classes, vocab_size=None):
     if model_type == 'Transformer_BERT':
-        print("Đang tải mô hình Transformer BERT")
         model = AutoModelForSequenceClassification.from_pretrained(
             "bert-base-uncased", 
             num_labels=num_classes
@@ -42,7 +41,6 @@ def build_model_pytorch(model_type, num_classes, vocab_size=None):
         return model
     
     elif model_type == 'Transformer_DistilBERT':
-        print("Đang tải mô hình Transformer DistilBERT (Small)")
         model = AutoModelForSequenceClassification.from_pretrained(
             "distilbert-base-uncased", 
             num_labels=num_classes
@@ -50,7 +48,6 @@ def build_model_pytorch(model_type, num_classes, vocab_size=None):
         return model
         
     elif model_type == 'RNN_Bi-LSTM':
-        print("Đang khởi tạo mạng RNN Bi-LSTM")
         if vocab_size is None:
             raise ValueError("Cần truyền vocab_size (kích thước từ điển) cho Bi-LSTM.")
         model = BiLSTM_Model(vocab_size=vocab_size, num_classes=num_classes)
