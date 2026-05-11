@@ -133,7 +133,8 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <a href="#dataset">2. Dataset</a>
     <a href="#model">3. Mô hình</a>
     <a href="#results">4. Kết quả</a>
-    <a href="#extensions">5. Mở rộng</a>
+    <a href="#extensions">5. Chi tiết</a>
+    <a href="#else">6. Ngoài ra</a>
   </div>
 </div></nav>
 
@@ -578,31 +579,186 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
       
       <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px;">
-        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 10px;">📈 1. Lịch sử Huấn luyện</h4>
-        <img src="./result/Bi-LSTM_Full_training_history.png" class="img-fluid" onerror="this.style.display='none'" style="margin-top:0;">
+        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 10px;">1. Lịch sử Huấn luyện</h4>
+        <img src="./result/Result/Bi-LSTM_Full_training_history.png" class="img-fluid" onerror="this.style.display='none'" style="margin-top:0;">
       </div>
 
       <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px;">
-        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 10px;">🎯 2. Confusion Matrix</h4>
-        <img src="./result/Bi-LSTM_Full_confusion_matrix.png" class="img-fluid" onerror="this.style.display='none'" style="margin-top:0;">
+        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 10px;">2. Confusion Matrix</h4>
+        <img src="./result/Result/Bi-LSTM_Full_confusion_matrix.png" class="img-fluid" onerror="this.style.display='none'" style="margin-top:0;">
       </div>
 
       <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px;">
-        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 10px;">🔍 3. Giải thích LIME</h4>
-        <img src="./result/lime_explanation_Bi-LSTM_Full.png" class="img-fluid" onerror="this.style.display='none'" style="margin-top:0;">
+        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 10px;">3. Giải thích LIME</h4>
+        <img src="./result/Result/lime_explanation_Bi-LSTM_Full.png" class="img-fluid" onerror="this.style.display='none'" style="margin-top:0;">
       </div>
 
       <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; gap: 12px;">
-        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 4px;">📂 Dữ liệu Báo cáo & Nội soi</h4>
-        <a href="./result/captum_explanation_Bi-LSTM_Full.html" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--rose);">🔬 4. Xem HTML Nội soi Captum</a>
-        <a href="./result/Bi-LSTM_Full_error_analysis.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--gold);">⚠️ 5. Tải CSV Phân tích lỗi</a>
-        <a href="./result/Bi-LSTM_Full_classification_report.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--pri);">📊 6. Tải CSV Báo cáo Phân loại</a>
+        <h4 style="color: var(--sec); font-size: 0.95rem; margin-bottom: 4px;">Dữ liệu Báo cáo & Nội soi</h4>
+        <a href="./result/Result/captum_explanation_Bi-LSTM_Full.html" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--rose);">🔬 4. Xem HTML Nội soi Captum</a>
+        <a href="./result/Result/Bi-LSTM_Full_error_analysis.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--gold);">⚠️ 5. Tải CSV Phân tích lỗi</a>
+        <a href="./result/Result/Bi-LSTM_Full_classification_report.csv" target="_blank" class="btn btn-ghost" style="text-align: center; border-color: var(--pri);">📊 6. Tải CSV Báo cáo Phân loại</a>
       </div>
 
     </div>
   </div>
 
   </div></section>
+
+  <section id="else"><div class="ctr">
+  <h2 class="stitle">PHẦN 6: CÁC KỊCH BẢN THỬ NGHIỆM KHÁC (ABLATION STUDIES)</h2>
+  <p class="sdesc">Lưu trữ biểu đồ và báo cáo của 6 cấu hình thử nghiệm mở rộng (Focal Loss, Augmentation, Freeze, DistilBERT) dùng làm cơ sở đối chiếu.</p>
+
+  <style>
+    .compact-case { padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--muted); }
+    .compact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-top: 16px; }
+    .compact-img-box { background: rgba(0,0,0,0.15); padding: 12px; border-radius: 10px; text-align: center; }
+    .compact-title { color: var(--sec); font-size: 0.85rem; margin-bottom: 8px; font-weight: 600; }
+    .compact-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .compact-links a { flex: 1; min-width: 140px; padding: 8px 12px; font-size: 0.8rem; text-align: center; }
+  </style>
+
+  <div class="glass compact-case">
+    <h3 class="sub" style="margin-top:0; color: #fff;">CASE: BERT_Freeze <span class="badge" style="float: right; background: rgba(255,255,255,0.1); color: #aaa;">Đóng băng Backbone</span></h3>
+    
+    <div class="compact-grid">
+      <div class="compact-img-box">
+        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <img src="./result/Result/BERT_Freeze_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🎯 Confusion Matrix</div>
+        <img src="./result/Result/BERT_Freeze_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🔍 LIME Explanation</div>
+        <img src="./result/Result/lime_explanation_BERT_Freeze.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+
+    <div class="compact-links">
+      <a href="./result/Result/captum_explanation_BERT_Freeze.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
+      <a href="./result/Result/BERT_Freeze_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
+      <a href="./result/Result/BERT_Freeze_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+    </div>
+  </div>
+
+  <div class="glass compact-case">
+    <h3 class="sub" style="margin-top:0; color: #fff;">CASE: BERT_Full_Focal <span class="badge" style="float: right; background: rgba(255,255,255,0.1); color: #aaa;">Xử lý mất cân bằng</span></h3>
+    <div class="compact-grid">
+      <div class="compact-img-box">
+        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <img src="./result/Result/BERT_Full_Focal_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🎯 Confusion Matrix</div>
+        <img src="./result/Result/BERT_Full_Focal_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🔍 LIME Explanation</div>
+        <img src="./result/Result/lime_explanation_BERT_Full_Focal.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+    <div class="compact-links">
+      <a href="./result/Result/captum_explanation_BERT_Full_Focal.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
+      <a href="./result/Result/BERT_Full_Focal_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
+      <a href="./result/Result/BERT_Full_Focal_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+    </div>
+  </div>
+
+  <div class="glass compact-case">
+    <h3 class="sub" style="margin-top:0; color: #fff;">CASE: Bi-LSTM_Focal</h3>
+    <div class="compact-grid">
+      <div class="compact-img-box">
+        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <img src="./result/Result/Bi-LSTM_Focal_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🎯 Confusion Matrix</div>
+        <img src="./result/Result/Bi-LSTM_Focal_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🔍 LIME Explanation</div>
+        <img src="./result/Result/lime_explanation_Bi-LSTM_Focal.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+    <div class="compact-links">
+      <a href="./result/Result/captum_explanation_Bi-LSTM_Focal.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
+      <a href="./result/Result/Bi-LSTM_Focal_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
+      <a href="./result/Result/Bi-LSTM_Focal_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+    </div>
+  </div>
+
+  <div class="glass compact-case">
+    <h3 class="sub" style="margin-top:0; color: #fff;">CASE: BERT_Augmented <span class="badge" style="float: right; background: rgba(255,255,255,0.1); color: #aaa;">Làm giàu dữ liệu</span></h3>
+    <div class="compact-grid">
+      <div class="compact-img-box">
+        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <img src="./result/Result/BERT_Augmented_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🎯 Confusion Matrix</div>
+        <img src="./result/Result/BERT_Augmented_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🔍 LIME Explanation</div>
+        <img src="./result/Result/lime_explanation_BERT_Augmented.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+    <div class="compact-links">
+      <a href="./result/Result/captum_explanation_BERT_Augmented.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
+      <a href="./result/Result/BERT_Augmented_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
+      <a href="./result/Result/BERT_Augmented_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+    </div>
+  </div>
+
+  <div class="glass compact-case">
+    <h3 class="sub" style="margin-top:0; color: #fff;">CASE: Bi-LSTM_Augmented</h3>
+    <div class="compact-grid">
+      <div class="compact-img-box">
+        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <img src="./result/Result/Bi-LSTM_Augmented_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🎯 Confusion Matrix</div>
+        <img src="./result/Result/Bi-LSTM_Augmented_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🔍 LIME Explanation</div>
+        <img src="./result/Result/lime_explanation_Bi-LSTM_Augmented.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+    <div class="compact-links">
+      <a href="./result/Result/captum_explanation_Bi-LSTM_Augmented.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
+      <a href="./result/Result/Bi-LSTM_Augmented_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
+      <a href="./result/Result/Bi-LSTM_Augmented_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+    </div>
+  </div>
+
+  <div class="glass compact-case">
+    <h3 class="sub" style="margin-top:0; color: #fff;">CASE: DistilBERT_Small <span class="badge" style="float: right; background: rgba(255,255,255,0.1); color: #aaa;">Mô hình tối ưu tốc độ</span></h3>
+    <div class="compact-grid">
+      <div class="compact-img-box">
+        <div class="compact-title">📈 Lịch sử Huấn luyện</div>
+        <img src="./result/Result/DistilBERT_Small_training_history.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🎯 Confusion Matrix</div>
+        <img src="./result/Result/DistilBERT_Small_confusion_matrix.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+      <div class="compact-img-box">
+        <div class="compact-title">🔍 LIME Explanation</div>
+        <img src="./result/Result/lime_explanation_DistilBERT_Small.png" class="img-fluid" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+    <div class="compact-links">
+      <a href="./result/Result/captum_explanation_DistilBERT_Small.html" target="_blank" class="btn btn-ghost" style="border-color: var(--rose);">🔬 Xem HTML Captum</a>
+      <a href="./result/Result/DistilBERT_Small_error_analysis.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--gold);">⚠️ CSV Phân tích lỗi</a>
+      <a href="./result/Result/DistilBERT_Small_classification_report.csv" target="_blank" class="btn btn-ghost" style="border-color: var(--pri);">📊 CSV Classification</a>
+    </div>
+  </div>
+
+</div></section>
 
 <style>
   .img-fluid {
