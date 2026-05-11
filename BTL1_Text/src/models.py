@@ -26,7 +26,11 @@ class BiLSTM_Model(nn.Module):
 
         pooled = self.dropout(pooled)
         logits = self.fc(pooled)
-        return SequenceClassifierOutput(loss=None, logits=logits)
+        loss = None
+        if labels is not None:
+            loss_fct = nn.CrossEntropyLoss()
+            loss = loss_fct(logits.view(-1, self.fc.out_features), labels.view(-1))
+        return SequenceClassifierOutput(loss=loss, logits=logits)
 
 def build_model_pytorch(model_type, num_classes, vocab_size=None):
     if model_type == 'Transformer_BERT':
