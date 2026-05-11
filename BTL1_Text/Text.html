@@ -400,58 +400,59 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
 
 <!-- SECTION 3: MODEL -->
 <section id="model"><div class="ctr">
-  <h2 class="stitle">PHẦN 3: XÂY DỰNG, HUẤN LUYỆN, ĐÁNH GIÁ VÀ SO SÁNH MÔ HÌNH</h2>
+  <h2 class="stitle">PHẦN 3: XÂY DỰNG, HUẤN LUYỆN VÀ ĐÁNH GIÁ MÔ HÌNH</h2>
   
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">3.1 Kiến trúc mô hình</h3>
     <div class="tw"><table>
-      <thead><tr><th>Model</th><th>Loại</th><th class="n">Params</th><th>Đặc điểm</th></tr></thead>
+      <thead><tr><th>Mô hình</th><th>Phân loại</th><th class="n">Params</th><th>Cấu trúc kỹ thuật lõi</th></tr></thead>
       <tbody>
-        <tr><td>Bi-LSTM</td><td>RNN</td><td class="n">~2.5M</td><td>Embedding + 2 LSTM layers + Mean Pooling</td></tr>
-        <tr><td>BERT</td><td>Transformer</td><td class="n">110M</td><td>bert-base-uncased, 12 layers</td></tr>
-        <tr><td>DistilBERT</td><td>Transformer nhẹ</td><td class="n">66M</td><td>6 layers, 40% nhẹ hơn BERT</td></tr>
+        <tr><td>Bi-LSTM</td><td>RNN</td><td class="n">~4.0M</td><td>Embedding (128) + 1 Layer Bi-LSTM (Hidden 32) + Attention Mask Pooling + Dropout (0.5) + Linear Classifier</td></tr>
+        <tr><td>BERT</td><td>Transformer</td><td class="n">110M</td><td>bert-base-uncased, 12 Attention Layers, 768 Hidden Size</td></tr>
+        <tr><td>DistilBERT</td><td>Transformer nhẹ</td><td class="n">66M</td><td>distilbert-base-uncased, 6 Attention Layers (Giữ lại 97% sức mạnh BERT nhưng nhanh hơn 60%)</td></tr>
       </tbody>
     </table></div>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">3.2 Chiến lược Fine-tune</h3>
+    <h3 class="sub" style="margin-top:0">3.2 Cấu hình Huấn luyện (Trainer API)</h3>
+    <ul style="color:var(--muted);line-height:2;padding-left:20px">
+      <li><strong>Learning Rate:</strong> <code>2e-5</code> cho họ Transformer (Fine-tune tinh chỉnh) và <code>1e-3</code> cho Bi-LSTM (Train from scratch).</li>
+      <li><strong>Tối ưu hóa phần cứng:</strong> Kích hoạt tính toán độ chính xác kép (Mixed Precision - <code>fp16=True</code>) giúp tăng tốc độ train trên GPU NVIDIA.</li>
+      <li><strong>Epochs & Chống Overfitting:</strong> Giới hạn <code>epochs = 5</code> cho mọi kịch bản. Tích hợp <code>EarlyStoppingCallback</code> (Dừng sớm nếu Macro F1 không cải thiện sau 2 epochs liên tiếp).</li>
+      <li><strong>Weight Decay:</strong> Thiết lập <code>0.01</code> để chuẩn hóa (Regularization) trọng số mạng lưới.</li>
+    </ul>
+  </div>
+
+  <div class="glass" style="padding:24px;margin-bottom:18px">
+    <h3 class="sub" style="margin-top:0">3.3 Chiến lược Loss Function</h3>
     <div class="tw"><table>
-      <thead><tr><th>Strategy</th><th>Mô tả</th><th>Kết quả mong đợi</th></tr></thead>
+      <thead><tr><th>Kịch bản</th><th>Hàm mất mát</th><th>Bản chất kỹ thuật</th></tr></thead>
       <tbody>
-        <tr><td>BERT_Freeze</td><td>Đóng băng backbone, chỉ train classifier</td><td>Nhanh nhưng điểm thấp do không phù hợp dữ liệu y khoa</td></tr>
-        <tr><td>BERT_Full</td><td>Train toàn bộ với Layer-wise LR</td><td>Tốt nhất, khắc phục mất cân bằng</td></tr>
-        <tr><td>Bi-LSTM_Full</td><td>Train từ đầu với random init</td><td>Ổn định, hội tụ tốt</td></tr>
+        <tr>
+          <td><strong>Standard</strong></td>
+          <td>Cross Entropy (CE)</td>
+          <td>Hàm mặc định của PyTorch. Tính toán độ lỗi dựa trên phân bố tự nhiên. Dễ bị thiên vị (bias) về phía lớp đa số (Methods, Results).</td>
+        </tr>
+        <tr>
+          <td><strong>Focal Loss</strong></td>
+          <td>Focal Loss + Class Weights</td>
+          <td>Hàm tùy chỉnh (Custom Loss). Tích hợp tham số <code>gamma=2.0</code> để giảm sự chú ý vào các mẫu dễ đoán, kết hợp với bộ trọng số tỷ lệ nghịch (từ Scikit-Learn) để "ép" mạng nơ-ron phải học kỹ lớp thiểu số (Objective).</td>
+        </tr>
       </tbody>
     </table></div>
-  </div>
-
-  <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">3.3 Hàm mất mát (Loss Functions)</h3>
-    <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li><strong>CrossEntropy + Class Weights:</strong> Baseline, xử lý mất cân bằng cơ bản</li>
-      <li><strong>Focal Loss:</strong> Giảm trọng số mẫu dễ, tập trung vào mẫu khó và lớp Objective</li>
-    </ul>
-  </div>
-
-  <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">3.4 Huấn luyện (Training)</h3>
-    <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li>Optimizer: AdamW với weight decay 0.01</li>
-      <li>Learning rate: 2e-5 (BERT), 1e-3 (Bi-LSTM)</li>
-      <li>Scheduler: Linear warmup + Cosine decay</li>
-      <li>Epochs: 10 cho BERT, 30 cho Bi-LSTM</li>
-      <li>Early stopping: 3 epochs không cải thiện</li>
-    </ul>
   </div>
 
   <div class="glass" style="padding:24px">
-    <h3 class="sub" style="margin-top:0">3.5 Đánh giá (Evaluation)</h3>
+    <h3 class="sub" style="margin-top:0">3.4 Ma trận Đánh giá Đa chiều (Comprehensive Evaluation)</h3>
+    <p style="color:var(--muted);line-height:1.8">
+      Hệ thống không chỉ đánh giá qua con số Accuracy đơn thuần, mà cung cấp một góc nhìn 360 độ về vòng đời mô hình:
+    </p>
     <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li>Metrics: Accuracy, Precision, Recall, F1-Score (Macro)</li>
-      <li>ECE (Expected Calibration Error): Đo độ tin cậy</li>
-      <li>Confusion Matrix: Trực quan lỗi phân loại</li>
-      <li>LIME: Giải thích từ khóa ảnh hưởng</li>
+      <li><strong>Hiệu năng học (Metrics):</strong> Accuracy, Macro F1-Score, Precision, Recall và Confusion Matrix để soi lỗi phân loại chéo giữa các nhãn.</li>
+      <li><strong>Phân tích lỗi (Error Analysis):</strong> Trích xuất tự động danh sách các câu dự đoán sai có mức độ tự tin (Confidence Score) cao nhất ra file CSV để chuyên gia phân tích ngữ nghĩa.</li>
+      <li><strong>Giải thích XAI (Explainable AI):</strong> Kết hợp <code>LIME</code> (trực quan hộp đen) và <code>Captum Integrated Gradients</code> (nội soi dòng chảy đạo hàm hộp trắng) để giải thích từ khóa nào quyết định nhãn y khoa.</li>
+      <li><strong>Đánh đổi kỹ thuật (Efficiency Trade-off):</strong> Đo đạc dung lượng Model (MB) và thời gian suy luận (Inference Time) để đánh giá tính khả thi khi triển khai (Deploy) thực tế.</li>
     </ul>
   </div>
 </div></section>
