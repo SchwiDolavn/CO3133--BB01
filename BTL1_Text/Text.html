@@ -234,14 +234,14 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     </div>
 
     <p style="color:var(--muted);margin-top:16px;font-size:.9rem">
-      <strong>Nhận xét:</strong> Dữ liệu bị mất cân bằng nghiêm trọng. Lớp <strong>Objective</strong> chỉ chiếm 8% trong khi <strong>Methods</strong> chiếm tới 27%. Đây là thách thức chính, đòi hỏi áp dụng Focal Loss để tối ưu hóa Recall cho các lớp thiểu số thay vì các kỹ thuật lấy mẫu thô sơ.
+      <strong>Nhận xét:</strong> Dữ liệu bị mất cân bằng nghiêm trọng. Lớp <strong>Objective</strong> chỉ chiếm 7.8% trong khi <strong>Methods</strong> chiếm tới 33.6%. Đây là thách thức chính, đòi hỏi áp dụng Focal Loss để tối ưu hóa Recall cho các lớp thiểu số.
     </p>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">1.4 Phân tích Đặc trưng Từ vựng (Lexical Analysis)</h3>
     <p style="color:var(--muted);line-height:1.8">
-      Trước khi đưa vào mô hình, việc phân tích tần suất từ vựng giúp chúng ta hiểu rõ "ngôn ngữ" của tập dữ liệu. Các biểu đồ dưới đây được kết xuất sau khi đã dọn dẹp sơ bộ (loại bỏ stop words và dấu câu).
+      Trước khi đưa vào mô hình, việc phân tích tần suất từ vựng giúp chúng ta hiểu rõ tập dữ liệu. Các biểu đồ dưới đây được kết xuất sau khi đãloại bỏ stop words và dấu câu.
     </p>
 
     <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 24px; width: 100%;">
@@ -359,8 +359,8 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
           <tr>
             <td><strong>Xử lý Stopwords</strong><br><span style="font-size: 0.8rem; font-weight: normal; color: var(--muted);">(Phân nhánh theo mô hình)</span></td>
             <td>
-              <span style="color: var(--sec); font-weight: bold;">✔️ Dành cho Bi-LSTM:</span> Loại bỏ hoàn toàn Stopwords bằng NLTK. Giúp giảm nhiễu từ vựng, ép mạng RNN tập trung ghi nhớ các từ khóa y khoa cốt lõi.<br>
-              <span style="color: var(--rose); font-weight: bold;">❌ Dành cho BERT:</span> <strong>Giữ nguyên Stopwords</strong>. Mô hình Transformer cực kỳ phụ thuộc vào giới từ, liên từ để tính toán trọng số ngữ cảnh (Attention). Nếu xóa sẽ làm phá vỡ ngữ pháp câu.
+              <span style="color: var(--sec); font-weight: bold;">Dành cho Bi-LSTM:</span> Loại bỏ hoàn toàn Stopwords bằng NLTK. Giúp giảm nhiễu từ vựng, ép mạng RNN tập trung ghi nhớ các từ khóa y khoa cốt lõi.<br>
+              <span style="color: var(--rose); font-weight: bold;">Dành cho BERT:</span> <strong>Giữ nguyên Stopwords</strong>. Mô hình Transformer cực kỳ phụ thuộc vào giới từ, liên từ để tính toán trọng số ngữ cảnh (Attention). Nếu xóa sẽ làm phá vỡ ngữ pháp câu.
             </td>
           </tr>
           <tr>
