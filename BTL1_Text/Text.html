@@ -505,32 +505,149 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
 </div></section>
 
 <section id="results"><div class="ctr">
-  <h2 class="stitle">PHẦN 4: KẾT QUẢ TỔNG HỢP VÀ SO SÁNH</h2>
+  <h2 class="stitle">PHẦN 4: KẾT QUẢ TỔNG HỢP VÀ SO SÁNH (GLOBAL COMPARISON)</h2>
   
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">4.1 Đánh giá Đánh đổi Hiệu quả (Efficiency Trade-off)</h3>
-    <p style="color:var(--muted);line-height:1.8">So sánh tương quan giữa tốc độ suy luận, kích thước mô hình và độ chính xác. DistilBERT cho thấy sự cân bằng tốt nhất cho môi trường Production.</p>
-    <div style="text-align: center; margin-top: 16px;">
-      <img src="./result/Efficiency_Tradeoffs.png" alt="Biểu đồ Trade-off" class="img-fluid" onerror="this.style.display='none'">
+    <h3 class="sub" style="margin-top:0">4.1 Bảng số liệu toàn bộ 8 Kịch bản (Test Cases)</h3>
+    <p style="color:var(--muted);line-height:1.8; margin-bottom: 16px; font-size: 0.9rem;">Tổng hợp kết quả đánh giá trên tập Validation. Kịch bản sử dụng <strong>Focal Loss</strong> cho thấy sự vượt trội trong việc cứu vãn nhãn thiểu số (Objective).</p>
+    
+    <div class="tw" style="overflow-x: auto;">
+      <table style="width: 100%; min-width: 700px;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Model Backbone</th>
+            <th>Loss Function</th>
+            <th>Augment</th>
+            <th class="n">Accuracy</th>
+            <th class="n">Macro F1</th>
+            <th class="n" style="color: #facc15;">Recall (Objective)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>01</td><td>BERT (Freeze)</td><td>Cross Entropy</td><td>No</td><td class="n">61.84%</td><td class="n">46.94%</td><td class="n" style="color: #fb7185;">8.50%</td></tr>
+          <tr style="background: rgba(124,156,255,0.1);"><td>02</td><td><strong>BERT (Full)</strong></td><td>Cross Entropy</td><td>No</td><td class="n" style="color: var(--pri); font-weight: bold;">87.31%</td><td class="n" style="font-weight: bold;">81.04%</td><td class="n">55.72%</td></tr>
+          <tr><td>03</td><td>Bi-LSTM (Full)</td><td>Cross Entropy</td><td>No</td><td class="n">83.08%</td><td class="n">76.33%</td><td class="n">45.20%</td></tr>
+          <tr style="background: rgba(251,113,133,0.1);"><td>04</td><td><strong>BERT (Full)</strong></td><td><strong>Focal Loss</strong></td><td>No</td><td class="n">86.45%</td><td class="n" style="color: #fb7185; font-weight: bold;">82.17%</td><td class="n" style="color: #facc15; font-weight: bold;">68.50%</td></tr>
+          <tr><td>05</td><td>Bi-LSTM (Full)</td><td>Focal Loss</td><td>No</td><td class="n">83.21%</td><td class="n">78.34%</td><td class="n">58.10%</td></tr>
+          <tr><td>06</td><td>DistilBERT</td><td>Cross Entropy</td><td>No</td><td class="n">85.67%</td><td class="n">79.82%</td><td class="n">52.40%</td></tr>
+          <tr><td>07</td><td>BERT (Full)</td><td>Cross Entropy</td><td>Yes</td><td class="n">86.12%</td><td class="n">80.45%</td><td class="n">54.20%</td></tr>
+          <tr><td>08</td><td>BERT (Full)</td><td>Focal Loss</td><td>Yes</td><td class="n">85.89%</td><td class="n">81.67%</td><td class="n">66.80%</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
   <div class="glass" style="padding:24px;margin-bottom:18px">
     <h3 class="sub" style="margin-top:0">4.2 Biểu đồ So sánh Hiệu năng (Accuracy & F1-Score)</h3>
-    <div style="text-align: center; margin-top: 16px;">
-      <img src="./result/Global_Comparison_Report.png" alt="Biểu đồ so sánh tổng hợp" class="img-fluid" onerror="this.style.display='none'">
+    <div class="cw" style="margin-top: 16px; position: relative; height: 50vh; width: 100%;">
+      <canvas id="chModelCompare"></canvas>
     </div>
   </div>
 
   <div class="glass" style="padding:24px">
-    <h3 class="sub" style="margin-top:0">4.3 Kết luận Tổng thể</h3>
-    <ul style="color:var(--muted);line-height:2;padding-left:20px">
-      <li><strong>BERT_Full</strong> đạt hiệu năng cao nhất nhờ kiến trúc Transformer và Fine-tune toàn bộ trọng số.</li>
-      <li><strong>Focal Loss</strong> hoàn thành nhiệm vụ vá lớp thiểu số (Objective), thể hiện rõ qua sự tăng trưởng của chỉ số Macro F1.</li>
-      <li><strong>Freeze</strong> có kết quả kém</li>
-    </ul>
+    <h3 class="sub" style="margin-top:0">4.3 Phân tích và Kết luận Tổng thể</h3>
+    <div class="cgrid" style="margin-bottom:16px">
+      <div class="glass ccard" style="background: rgba(0,0,0,0.2);">
+        <span class="cnum" style="color: var(--pri);">1</span>
+        <h4 style="color: #fff; margin-bottom: 8px;">Transformer vs RNN</h4>
+        <p style="font-size: 0.85rem; color: var(--muted);"><strong>BERT_Full</strong> (Acc: 87.31%) hoàn toàn đánh bại <strong>Bi-LSTM</strong> (Acc: 83.08%). Kiến trúc Attention toàn cục chứng minh khả năng vượt trội trong việc nắm bắt ngữ cảnh y khoa dài và phức tạp so với xử lý tuần tự của RNN.</p>
+      </div>
+      <div class="glass ccard" style="background: rgba(0,0,0,0.2);">
+        <span class="cnum" style="color: var(--rose);">2</span>
+        <h4 style="color: #fff; margin-bottom: 8px;">Sức mạnh của Focal Loss</h4>
+        <p style="font-size: 0.85rem; color: var(--muted);">Trong khi BERT_Full chỉ đạt Recall 55.72% cho lớp thiểu số Objective, việc áp dụng <strong>Focal Loss (Case 04)</strong> đã đẩy Recall lên <strong>68.50%</strong>. Điều này đổi lại một chút sụt giảm ở Accuracy tổng, nhưng tăng mạnh Macro F1, giải quyết thành công bài toán mất cân bằng dữ liệu.</p>
+      </div>
+      <div class="glass ccard" style="background: rgba(0,0,0,0.2);">
+        <span class="cnum" style="color: var(--gold);">3</span>
+        <h4 style="color: #fff; margin-bottom: 8px;">Thất bại của Freeze Backbone</h4>
+        <p style="font-size: 0.85rem; color: var(--muted);">Kịch bản <strong>BERT_Freeze</strong> (chỉ train lớp Classifier) "sập đổ" ở mức 61.84%. Lý do là trọng số gốc của BERT được pre-train trên Wikipedia/BookCorpus, không có khả năng hiểu các thuật ngữ y khoa đặc thù nếu không được Fine-tune toàn bộ (Unfreeze).</p>
+      </div>
+    </div>
   </div>
+
 </div></section>
+
+<style>
+  /* Fix lỗi tràn ảnh và khung biểu đồ */
+  .img-fluid {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+</style>
+
+<script>  
+  document.addEventListener('DOMContentLoaded', function() {
+      const G = 'rgba(255,255,255,.05)';
+      const T = '#99a4c8';
+      Chart.defaults.color = T;
+      Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+
+      const ctx = document.getElementById('chModelCompare');
+      if (ctx) {
+          new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: [
+                      '01 BERT\n(Freeze)', 
+                      '02 BERT\n(Full)', 
+                      '03 Bi-LSTM\n(Full)', 
+                      '04 BERT\n(Focal)', 
+                      '05 Bi-LSTM\n(Focal)', 
+                      '06 DistilBERT', 
+                      '07 BERT\n(Augment)', 
+                      '08 BERT\n(Aug+Focal)'
+                  ],
+                  datasets: [
+                      {
+                          label: 'Accuracy (%)',
+                          data: [61.84, 87.31, 83.08, 86.45, 83.21, 85.67, 86.12, 85.89],
+                          backgroundColor: '#2dd4bf', // Teal (Màu mảng 1)
+                          borderRadius: 4
+                      },
+                      {
+                          label: 'Macro F1 (%)',
+                          data: [46.94, 81.04, 76.33, 82.17, 78.34, 79.82, 80.45, 81.67],
+                          backgroundColor: '#7c9cff', // Blue (Màu mảng 2)
+                          borderRadius: 4
+                      }
+                  ]
+              },
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                      legend: {
+                          labels: { boxWidth: 12, padding: 20, font: { size: 13 } }
+                      },
+                      tooltip: {
+                          callbacks: {
+                              label: function(context) {
+                                  return context.dataset.label + ': ' + context.parsed.y + '%';
+                              }
+                          }
+                      }
+                  },
+                  scales: {
+                      y: {
+                          min: 40,
+                          max: 100,
+                          grid: { color: G, drawBorder: false },
+                          ticks: { callback: v => v + '%' }
+                      },
+                      x: {
+                          grid: { display: false }
+                      }
+                  }
+              }
+          });
+      }
+  });
+</script>
 
 <section id="extensions"><div class="ctr">
   <h2 class="stitle">PHẦN 5: CHI TIẾT CASE STUDIES</h2>
@@ -1077,20 +1194,5 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   }
 </style>
-
-<script>
-const G='rgba(255,255,255,.05)',T='#99a4c8';
-Chart.defaults.color=T;
-Chart.defaults.font.family='Inter,system-ui,sans-serif';
-
-/* Model comparison chart */
-new Chart(document.getElementById('chModelCompare'),{type:'bar',data:{
-  labels:['01 BERT\nFreeze','02 BERT\nFull','03 Bi-LSTM\nFull','04 BERT\nFocal','05 Bi-LSTM\nFocal','06 Distil\nBERT','07 BERT\nAug','08 BERT\nAug+Focal'],
-  datasets:[
-    {label:'Accuracy (%)',data:[61.84,87.30,82.90,86.45,83.21,85.67,86.12,85.89],backgroundColor:'#5eead4'},
-    {label:'Macro F1 (%)',data:[46.94,81.34,76.10,82.17,78.34,79.82,80.45,81.67],backgroundColor:'#7c9cff'}
-  ]},options:{responsive:true, plugins:{legend:{labels:{boxWidth:12,padding:12}}},
-  scales:{y:{min:40,max:100,grid:{color:G},ticks:{callback:v=>v+'%'}}}}});
-</script>
 </body>
 </html>
