@@ -1,0 +1,4 @@
+split,rows_before_keyword_filter,rows_after_keyword_filter,rows_after_image_and_class_filter,keyword_filter_keep_rate
+train,65448,38092,38072,0.5820193130424154
+val,8180,4752,4749,0.5809290953545232
+test,8179,4820,4818,0.5893140970778824

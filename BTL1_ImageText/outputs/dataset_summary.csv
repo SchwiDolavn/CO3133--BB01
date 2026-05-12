@@ -1,0 +1,4 @@
+split,samples,unique_images,unique_captions,num_classes,mean_caption_len
+test,4818,4818,4806,5,143.9373183893732
+train,38072,38072,37611,5,140.6802899768859
+val,4749,4749,4731,5,139.90271636133923

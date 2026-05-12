@@ -1,0 +1,6 @@
+,ct,xray_radiograph,mri,ultrasound,angiography
+ct,1915,47,94,19,28
+xray_radiograph,25,1318,11,7,10
+mri,19,8,766,4,5
+ultrasound,2,0,1,290,3
+angiography,6,2,1,3,234

@@ -1,0 +1,10 @@
+item,value
+task,Multimodal classification
+keyword_filter,enabled
+target_keyword_groups,"{""ct"": [""ct"", ""tomography"", ""computed tomography""], ""xray_radiograph"": [""xray"", ""x-ray"", ""radiograph"", ""radiographic"", ""anteroposterior""], ""mri"": [""mri"", ""magnetic"", ""resonance"", ""magnetic resonance""], ""ultrasound"": [""ultrasound"", ""sonograph"", ""sonographic"", ""sonography""], ""angiography"": [""angiography"", ""angiogram"", ""arteriography""]}"
+label_source,keyword_filter_group: keyword_label
+classes,"ct, xray_radiograph, mri, ultrasound, angiography"
+num_classes,5
+zero_shot,No classifier training; both CLIP-style models use image/caption embeddings against class-name prompts.
+few_shot,Train a lightweight classifier with 8 samples per class from the keyword-filtered train split.
+metrics,"Accuracy, precision, recall, F1, balanced accuracy, confusion matrix."

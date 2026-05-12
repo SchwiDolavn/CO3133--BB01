@@ -1,0 +1,16 @@
+split,label,count
+test,ct,2103
+test,xray_radiograph,1371
+test,mri,802
+test,ultrasound,296
+test,angiography,246
+train,ct,16623
+train,xray_radiograph,10963
+train,mri,6384
+train,ultrasound,2241
+train,angiography,1861
+val,ct,2051
+val,xray_radiograph,1378
+val,mri,832
+val,ultrasound,250
+val,angiography,238

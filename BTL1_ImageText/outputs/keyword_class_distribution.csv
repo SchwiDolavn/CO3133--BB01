@@ -1,0 +1,16 @@
+split,keyword_label,rows_after_keyword_filter
+test,ct,2104
+test,xray_radiograph,1371
+test,mri,803
+test,ultrasound,296
+test,angiography,246
+train,ct,16636
+train,xray_radiograph,10965
+train,mri,6388
+train,ultrasound,2241
+train,angiography,1862
+val,ct,2053
+val,xray_radiograph,1378
+val,mri,832
+val,ultrasound,251
+val,angiography,238
