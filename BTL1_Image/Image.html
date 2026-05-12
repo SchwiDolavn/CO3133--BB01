@@ -6,7 +6,7 @@
 <title>Blood Cells — Báo cáo phân loại Ảnh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="./docs/https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
 :root{--bg:#0b1120;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);--text:#eef2ff;--muted:#99a4c8;--pri:#7c9cff;--sec:#5eead4;--gold:#f59e0b;--rose:#fb7185;--violet:#9b8cff;--radius:20px;--shadow:0 16px 48px rgba(0,0,0,.3)}
 *{box-sizing:border-box;margin:0}
@@ -63,13 +63,22 @@ tbody tr:hover{background:rgba(255,255,255,.03)}
 .cw{margin-top:16px;padding:16px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05)}
 .cw canvas{width:100%!important;max-height:360px}
 .cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.ccard{padding:22px;position:relative;overflow:hidden;transition:.2s}
+.ccard{padding:22px;position:relative;overflow:hidden;transition:.2s; display: flex; flex-direction: column;}
 .ccard:hover{transform:translateY(-4px);border-color:rgba(124,156,255,.4)}
 .cnum{display:inline-flex;width:40px;height:40px;align-items:center;justify-content:center;border-radius:12px;background:rgba(124,156,255,.16);color:#c6d0ff;font-weight:800;margin-bottom:14px}
 .ccard h3{font-size:1.1rem;margin-bottom:10px}
 .ccard p{color:var(--muted);font-size:.92rem;line-height:1.7}
 .sub{margin:24px 0 10px;font-size:1.08rem;color:var(--sec);font-weight:700}
 footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem}
+
+/* CSS bổ sung cho Gallery Hình ảnh */
+.img-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 16px; }
+.img-card { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; border: 1px solid var(--border); text-align: center; transition: 0.2s; }
+.img-card:hover { transform: translateY(-4px); border-color: var(--pri); }
+.img-card img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 8px; background: white; }
+.img-name { font-size: 0.75rem; color: var(--muted); word-break: break-word; font-family: monospace; }
+.ext-img { width: 100%; height: auto; border-radius: 10px; margin-top: 16px; border: 1px solid var(--border); background: white; }
+
 @media(max-width:960px){.hero-grid,.cgrid{grid-template-columns:1fr}.hero{padding-top:40px}}
 @media(max-width:640px){nav .inner{flex-direction:column;align-items:flex-start}.hero h1{font-size:1.8rem}.btn{width:100%}.hero-actions{flex-direction:column}}
 </style>
@@ -167,108 +176,50 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>01</td>
-            <td>ResNet18</td>
-            <td>Freeze</td>
-            <td>No</td>
-            <td>CE+Weight</td>
-            <td>85.32%</td>
-            <td>84.18%</td>
-            <td>0.1639</td>
-          </tr>
-          <tr>
-            <td>02</td>
-            <td>ResNet18</td>
-            <td>Full</td>
-            <td>No</td>
-            <td>CE+Weight</td>
-            <td>97.85%</td>
-            <td>97.72%</td>
-            <td>0.0123</td>
-          </tr>
-          <tr>
-            <td>03</td>
-            <td>ResNet18</td>
-            <td>Layer-wise</td>
-            <td>No</td>
-            <td>CE+Weight</td>
-            <td><strong>98.92%</strong></td>
-            <td><strong>98.88%</strong></td>
-            <td>0.0061</td>
-          </tr>
-          <tr>
-            <td>04</td>
-            <td>ViT-B/16</td>
-            <td>Freeze</td>
-            <td>No</td>
-            <td>CE+Weight</td>
-            <td>83.45%</td>
-            <td>82.91%</td>
-            <td>0.1852</td>
-          </tr>
-          <tr>
-            <td>05</td>
-            <td>ViT-B/16</td>
-            <td>Layer-wise</td>
-            <td>No</td>
-            <td>CE+Weight</td>
-            <td>98.74%</td>
-            <td>98.69%</td>
-            <td>0.0078</td>
-          </tr>
-          <tr>
-            <td>06</td>
-            <td>MobileNetV3</td>
-            <td>Layer-wise</td>
-            <td>No</td>
-            <td>CE+Weight</td>
-            <td>98.45%</td>
-            <td>98.41%</td>
-            <td>0.0058</td>
-          </tr>
-          <tr>
-            <td>07</td>
-            <td>ResNet18</td>
-            <td>Layer-wise</td>
-            <td>Yes Rand</td>
-            <td>CE+Weight</td>
-            <td>98.57%</td>
-            <td>98.52%</td>
-            <td>0.0082</td>
-          </tr>
-          <tr>
-            <td>08</td>
-            <td>ResNet18</td>
-            <td>Layer-wise</td>
-            <td>No</td>
-            <td>Focal Loss</td>
-            <td>98.74%</td>
-            <td>98.71%</td>
-            <td>0.0095</td>
-          </tr>
-          <tr>
-            <td>09</td>
-            <td>ResNet18_Ult</td>
-            <td>Layer-wise</td>
-            <td>Yes Rand</td>
-            <td>Focal Loss</td>
-            <td>98.38%</td>
-            <td>98.34%</td>
-            <td>0.0101</td>
-          </tr>
-          <tr>
-            <td>10</td>
-            <td>ViT_Ult</td>
-            <td>Layer-wise</td>
-            <td>Yes Rand</td>
-            <td>Focal Loss</td>
-            <td>98.21%</td>
-            <td>98.15%</td>
-            <td>0.0112</td>
-          </tr>
+          <tr><td>01</td><td>ResNet18</td><td>Freeze</td><td>No</td><td>CE+Weight</td><td>85.32%</td><td>84.18%</td><td>0.1639</td></tr>
+          <tr><td>02</td><td>ResNet18</td><td>Full</td><td>No</td><td>CE+Weight</td><td>97.85%</td><td>97.72%</td><td>0.0123</td></tr>
+          <tr><td>03</td><td>ResNet18</td><td>Layer-wise</td><td>No</td><td>CE+Weight</td><td><strong>98.92%</strong></td><td><strong>98.88%</strong></td><td>0.0061</td></tr>
+          <tr><td>04</td><td>ViT-B/16</td><td>Freeze</td><td>No</td><td>CE+Weight</td><td>83.45%</td><td>82.91%</td><td>0.1852</td></tr>
+          <tr><td>05</td><td>ViT-B/16</td><td>Layer-wise</td><td>No</td><td>CE+Weight</td><td>98.74%</td><td>98.69%</td><td>0.0078</td></tr>
+          <tr><td>06</td><td>MobileNetV3</td><td>Layer-wise</td><td>No</td><td>CE+Weight</td><td>98.45%</td><td>98.41%</td><td>0.0058</td></tr>
+          <tr><td>07</td><td>ResNet18</td><td>Layer-wise</td><td>Yes</td><td>CE+Weight</td><td>98.57%</td><td>98.52%</td><td>0.0082</td></tr>
+          <tr><td>08</td><td>ResNet18</td><td>Layer-wise</td><td>No</td><td>Focal Loss</td><td>98.74%</td><td>98.71%</td><td>0.0095</td></tr>
+          <tr><td>09</td><td>ResNet18_Ult</td><td>Layer-wise</td><td>Yes</td><td>Focal Loss</td><td>98.38%</td><td>98.34%</td><td>0.0101</td></tr>
+          <tr><td>10</td><td>ViT_Ult</td><td>Layer-wise</td><td>Yes</td><td>Focal Loss</td><td>98.21%</td><td>98.15%</td><td>0.0112</td></tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <div class="glass" style="padding:24px;margin-bottom:20px">
+    <h3 class="sub">Confusion Matrices (10 Test Cases)</h3>
+    <div class="img-gallery">
+      <div class="img-card"><img src="./docs/cm_01_ResNet_Freeze.png" alt="CM 01"><div class="img-name">cm_01_ResNet_Freeze</div></div>
+      <div class="img-card"><img src="./docs/cm_02_ResNet_Full.png" alt="CM 02"><div class="img-name">cm_02_ResNet_Full</div></div>
+      <div class="img-card"><img src="./docs/cm_03_ResNet_LayerWise.png" alt="CM 03"><div class="img-name">cm_03_ResNet_LayerWise</div></div>
+      <div class="img-card"><img src="./docs/cm_04_ViT_Freeze.png" alt="CM 04"><div class="img-name">cm_04_ViT_Freeze</div></div>
+      <div class="img-card"><img src="./docs/cm_05_ViT_LayerWise.png" alt="CM 05"><div class="img-name">cm_05_ViT_LayerWise</div></div>
+      <div class="img-card"><img src="./docs/cm_06_MobileNet_LayerWise.png" alt="CM 06"><div class="img-name">cm_06_MobileNet_LayerWise</div></div>
+      <div class="img-card"><img src="./docs/cm_07_ResNet_Augment.png" alt="CM 07"><div class="img-name">cm_07_ResNet_Augment</div></div>
+      <div class="img-card"><img src="./docs/cm_08_ResNet_FocalLoss.png" alt="CM 08"><div class="img-name">cm_08_ResNet_FocalLoss</div></div>
+      <div class="img-card"><img src="./docs/cm_09_ResNet_Ultimate.png" alt="CM 09"><div class="img-name">cm_09_ResNet_Ultimate</div></div>
+      <div class="img-card"><img src="./docs/cm_10_ViT_Ultimate.png" alt="CM 10"><div class="img-name">cm_10_ViT_Ultimate</div></div>
+    </div>
+  </div>
+
+  <div class="glass" style="padding:24px;margin-bottom:20px">
+    <h3 class="sub">Error Analysis (Ảnh nhận diện sai)</h3>
+    <div class="img-gallery">
+      <div class="img-card"><img src="./docs/errors_01_ResNet_Freeze.png" alt="Error 01"><div class="img-name">errors_01_ResNet_Freeze</div></div>
+      <div class="img-card"><img src="./docs/errors_02_ResNet_Full.png" alt="Error 02"><div class="img-name">errors_02_ResNet_Full</div></div>
+      <div class="img-card"><img src="./docs/errors_03_ResNet_LayerWise.png" alt="Error 03"><div class="img-name">errors_03_ResNet_LayerWise</div></div>
+      <div class="img-card"><img src="./docs/errors_04_ViT_Freeze.png" alt="Error 04"><div class="img-name">errors_04_ViT_Freeze</div></div>
+      <div class="img-card"><img src="./docs/errors_05_ViT_LayerWise.png" alt="Error 05"><div class="img-name">errors_05_ViT_LayerWise</div></div>
+      <div class="img-card"><img src="./docs/errors_06_MobileNet_LayerWise.png" alt="Error 06"><div class="img-name">errors_06_MobileNet_LayerWise</div></div>
+      <div class="img-card"><img src="./docs/errors_07_ResNet_Augment.png" alt="Error 07"><div class="img-name">errors_07_ResNet_Augment</div></div>
+      <div class="img-card"><img src="./docs/errors_08_ResNet_FocalLoss.png" alt="Error 08"><div class="img-name">errors_08_ResNet_FocalLoss</div></div>
+      <div class="img-card"><img src="./docs/errors_09_ResNet_Ultimate.png" alt="Error 09"><div class="img-name">errors_09_ResNet_Ultimate</div></div>
+      <div class="img-card"><img src="./docs/errors_10_ViT_Ultimate.png" alt="Error 10"><div class="img-name">errors_10_ViT_Ultimate</div></div>
     </div>
   </div>
 
@@ -318,16 +269,18 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
       <span class="cnum">📊</span>
       <h3>Error Analysis</h3>
       <p>Tự động trích xuất các mẫu bị phân loại sai kèm confidence score. Phân tích pattern nhầm lẫn giữa các lớp tế bào.</p>
-    </div>
+      </div>
     <div class="glass ccard">
       <span class="cnum">🔍</span>
       <h3>Grad-CAM</h3>
       <p>Trực quan hóa vùng ảnh mà mô hình chú ý khi đưa ra quyết định. Giúp hiểu cơ chế "nhìn" của CNN.</p>
+      <img src="./docs/gradcam_analysis.png" class="ext-img" alt="Grad-CAM Analysis">
     </div>
     <div class="glass ccard">
       <span class="cnum">⚡</span>
       <h3>Efficiency</h3>
       <p>Đo lường kích thước model, inference time và vẽ biểu đồ bubble chart so sánh Accuracy vs Speed vs Size.</p>
+      <img src="./docs/./docs/efficiency_bubble_chart.png" class="ext-img" alt="Efficiency Bubble Chart">
     </div>
     <div class="glass ccard">
       <span class="cnum">📈</span>
