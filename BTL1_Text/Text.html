@@ -508,8 +508,8 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
   <h2 class="stitle">PHẦN 4: KẾT QUẢ TỔNG HỢP VÀ SO SÁNH (GLOBAL COMPARISON)</h2>
   
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">4.1 Bảng số liệu toàn bộ 8 Kịch bản (Test Cases)</h3>
-    <p style="color:var(--muted);line-height:1.8; margin-bottom: 16px; font-size: 0.9rem;">Tổng hợp kết quả đánh giá trên tập Validation. Kịch bản sử dụng <strong>Focal Loss</strong> cho thấy sự vượt trội trong việc cứu vãn nhãn thiểu số (Objective).</p>
+    <h3 class="sub" style="margin-top:0">4.1 Bảng số liệu toàn bộ 8 Case (Test Cases)</h3>
+    <p style="color:var(--muted);line-height:1.8; margin-bottom: 16px; font-size: 0.9rem;">Tổng hợp kết quả đánh giá trên tập Validation. Case sử dụng <strong>Focal Loss</strong> cho thấy sự vượt trội trong việc cứu vãn nhãn thiểu số (Objective).</p>
     
     <div class="tw" style="overflow-x: auto;">
       <table style="width: 100%; min-width: 700px;">
@@ -561,7 +561,7 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
       <div class="glass ccard" style="background: rgba(0,0,0,0.2);">
         <span class="cnum" style="color: var(--gold);">3</span>
         <h4 style="color: #fff; margin-bottom: 8px;">Thất bại của Freeze Backbone</h4>
-        <p style="font-size: 0.85rem; color: var(--muted);">Kịch bản <strong>BERT_Freeze</strong> (chỉ train lớp Classifier) "sập đổ" ở mức 61.84%. Lý do là trọng số gốc của BERT được pre-train trên Wikipedia/BookCorpus, không có khả năng hiểu các thuật ngữ y khoa đặc thù nếu không được Fine-tune toàn bộ (Unfreeze).</p>
+        <p style="font-size: 0.85rem; color: var(--muted);">Case <strong>BERT_Freeze</strong> (chỉ train lớp Classifier) "sập đổ" ở mức 61.84%. Lý do là trọng số gốc của BERT được pre-train trên Wikipedia/BookCorpus, không có khả năng hiểu các thuật ngữ y khoa đặc thù nếu không được Fine-tune toàn bộ (Unfreeze).</p>
       </div>
     </div>
   </div>
@@ -1030,7 +1030,7 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
 
   </div></section>
   <section id="else"><div class="ctr">
-  <h2 class="stitle">PHẦN 6: CÁC KỊCH BẢN THỬ NGHIỆM KHÁC (ABLATION STUDIES)</h2>
+  <h2 class="stitle">PHẦN 6: CÁC CASE THỬ NGHIỆM KHÁC (ABLATION STUDIES)</h2>
   <p class="sdesc">Lưu trữ biểu đồ và báo cáo của 6 cấu hình thử nghiệm mở rộng (Focal Loss, Augmentation, Freeze, DistilBERT) dùng làm cơ sở đối chiếu.</p>
 
   <style>
