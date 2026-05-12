@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ROCO Radiology — Báo cáo phân loại đa phương thức</title>
+<title>ROCO Radiology — Multimodal Classification Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
-:root{--bg:#0b1120;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);--text:#eef2ff;--muted:#99a4c8;--pri:#7c9cff;--sec:#5eead4;--gold:#f59e0b;--rose:#fb7185;--violet:#9b8cff;--radius:20px;--shadow:0 16px 48px rgba(0,0,0,.3)}
+:root{--bg:#0b1120;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.09);--text:#eef2ff;--muted:#99a4c8;--pri:#7c9cff;--sec:#5eead4;--gold:#f59e0b;--rose:#fb7185;--violet:#9b8cff;--green:#22c55e;--radius:20px;--shadow:0 16px 48px rgba(0,0,0,.3)}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
 body{font-family:Inter,system-ui,sans-serif;color:var(--text);background:radial-gradient(ellipse at 10% 0%,rgba(124,156,255,.18),transparent 40%),radial-gradient(ellipse at 90% 0%,rgba(94,234,212,.14),transparent 35%),var(--bg);min-height:100vh;line-height:1.6}
 a{color:inherit;text-decoration:none}
+code{padding:2px 6px;border-radius:7px;background:rgba(255,255,255,.08);color:#dbe6ff;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em}
 .ctr{max-width:1120px;margin:0 auto;padding:0 20px}
 
 /* NAV */
@@ -40,6 +41,10 @@ nav .links a:hover{color:#fff}
 .info-box{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
 .info-box .lbl{display:block;color:var(--sec);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
 .info-box .val{color:#fff;font-size:.94rem}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+.kpi{padding:16px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.08)}
+.kpi .num{display:block;font-size:1.55rem;font-weight:800;letter-spacing:-.03em;color:#fff}
+.kpi .cap{display:block;color:var(--muted);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
 
 /* SECTIONS */
 section{padding:20px 0}
@@ -67,15 +72,21 @@ section{padding:20px 0}
 /* TABLE */
 .tw{overflow-x:auto;border-radius:14px;border:1px solid var(--border);margin-top:12px}
 table{width:100%;border-collapse:collapse;font-size:.84rem}
-th,td{padding:9px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06)}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
 th{background:rgba(124,156,255,.1);color:#c6d0ff;font-weight:700;white-space:nowrap}
 tr:last-child td{border-bottom:0}
 tbody tr:hover{background:rgba(255,255,255,.03)}
 .n{font-variant-numeric:tabular-nums}
+.best{color:var(--sec);font-weight:800}
+.note{margin-top:12px;color:var(--muted);font-size:.9rem}
 
 /* CHART */
 .cw{margin-top:16px;padding:16px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05)}
 .cw canvas{width:100%!important;max-height:360px}
+.plot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.plot-card{overflow:hidden;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07)}
+.plot-card img{display:block;width:100%;height:auto;background:#fff}
+.plot-card .pcap{padding:12px 14px;color:var(--muted);font-size:.86rem}
 
 /* VIZ GRID */
 .vg{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
@@ -103,7 +114,7 @@ tbody tr:hover{background:rgba(255,255,255,.03)}
 
 footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem}
 
-@media(max-width:960px){.hero-grid,.vg,.cgrid,.members{grid-template-columns:1fr}.hero{padding-top:40px}}
+@media(max-width:960px){.hero-grid,.vg,.cgrid,.members,.kpis,.plot-grid{grid-template-columns:1fr}.hero{padding-top:40px}}
 @media(max-width:640px){nav .inner{flex-direction:column;align-items:flex-start}.hero h1{font-size:1.8rem}.btn{width:100%}.hero-actions{flex-direction:column}}
 </style>
 </head>
@@ -115,6 +126,7 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <a href="#intro">Giới thiệu</a>
     <a href="#pipeline">Pipeline</a>
     <a href="#results">Kết quả</a>
+    <a href="#plots">Plots</a>
   </div>
 </div></nav>
 
@@ -123,19 +135,25 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
 <!-- HERO -->
 <section class="hero" id="intro"><div class="ctr hero-grid">
   <div class="glass hero-main">
-    <div class="badge">Báo cáo</div>
-    <h1>ROCO Radiology — Phân loại đa phương thức theo modality</h1>
-    <p>Huấn luyện ViT + Text encoder theo hướng CLIP trên tập ROCO, không gian nhãn modality đã làm sạch, kết hợp Optimal Transport local và class-description alignment. Trang này tổng hợp toàn bộ số liệu từ thư mục Train Result.</p>
+    <div class="badge">Dashboard kết quả mới</div>
+    <h1>ROCO Radiology — Phân loại đa phương thức bằng CLIP</h1>
+    <p>Dashboard tổng hợp output mới từ <code>outputs/</code> và <code>docs/</code>: keyword-filter ROCO Radiology thành 5 lớp, so sánh CLIP-ViT-B/32 với OpenCLIP-ResNet50 ở zero-shot và few-shot trên frozen multimodal features.</p>
     <div class="hero-actions">
       <a class="btn btn-pri" href="#results">Xem kết quả</a>
-      <a class="btn btn-ghost" href="#pipeline">Xem pipeline</a>
+      <a class="btn btn-ghost" href="#plots">Xem plot docs</a>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><span class="num">93,88%</span><span class="cap">Best accuracy</span></div>
+      <div class="kpi"><span class="num">92,85%</span><span class="cap">Best F1 macro</span></div>
+      <div class="kpi"><span class="num">4 818</span><span class="cap">Test samples</span></div>
+      <div class="kpi"><span class="num">5</span><span class="cap">Filtered classes</span></div>
     </div>
   </div>
   <div class="glass hero-side">
     <div class="info-box"><span class="lbl">Bộ dữ liệu</span><div class="val">ROCO Radiology</div></div>
-    <div class="info-box"><span class="lbl">Nhãn</span><div class="val">modality_clean — 6 lớp: CT, X-ray, MRI, Ultrasound, Angiography, Fluoroscopy</div></div>
-    <div class="info-box"><span class="lbl">Thiết bị</span><div class="val">CUDA — Tesla T4 trên Kaggle</div></div>
-    <div class="info-box"><span class="lbl">Cấu hình</span><div class="val">Batch 64 · 224×224 · embed 256 · 50 epoch · λ_ot 0.15 · λ_cls 0.4</div></div>
+    <div class="info-box"><span class="lbl">Nhãn</span><div class="val">Keyword groups — ct, xray_radiograph, mri, ultrasound, angiography</div></div>
+    <div class="info-box"><span class="lbl">Mô hình</span><div class="val">openai/clip-vit-base-patch32 · timm/resnet50_clip.openai</div></div>
+    <div class="info-box"><span class="lbl">Thiết lập</span><div class="val">Image 224×224 · zero-shot prompts · LogisticRegression few-shot balanced</div></div>
   </div>
 </div></section>
 
@@ -147,36 +165,36 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
       <div class="pipe-card">
         <span class="pipe-badge">STEP 01</span>
         <h4>Raw input</h4>
-        <p class="pd">Đọc ảnh ROCO Radiology cùng caption và ba split train, val, test.</p>
+        <p class="pd">Đọc ảnh ROCO Radiology cùng caption/report text và ba split train, val, test.</p>
         <div class="pipe-tags"><span class="ptag b">Image</span><span class="ptag t">Caption</span><span class="ptag o">3 splits</span></div>
       </div>
       <div class="arrow"><i></i></div>
       <div class="pipe-card">
         <span class="pipe-badge">STEP 02</span>
-        <h4>Label cleaning</h4>
-        <p class="pd">Giữ mẫu single-label, gom nhãn về modality only, chọn 6 lớp cuối cùng.</p>
-        <div class="pipe-tags"><span class="ptag o">Single-label</span><span class="ptag g">Modality</span><span class="ptag o">6 classes</span></div>
+        <h4>Keyword filter</h4>
+        <p class="pd">Lọc theo keyword group, giữ 5 lớp có đủ dữ liệu và ảnh hợp lệ.</p>
+        <div class="pipe-tags"><span class="ptag o">Keyword</span><span class="ptag g">5 classes</span><span class="ptag o">Separate splits</span></div>
       </div>
       <div class="arrow"><i></i></div>
       <div class="pipe-card">
         <span class="pipe-badge">STEP 03</span>
-        <h4>Pretrain</h4>
-        <p class="pd">Contrastive image-caption, OT local alignment, class-description alignment.</p>
-        <div class="pipe-tags"><span class="ptag b">Vision</span><span class="ptag g">Text</span><span class="ptag v">OT</span></div>
+        <h4>Feature extraction</h4>
+        <p class="pd">Dùng frozen CLIP/OpenCLIP encoder để lấy image, caption và multimodal embeddings.</p>
+        <div class="pipe-tags"><span class="ptag b">Image</span><span class="ptag g">Caption</span><span class="ptag v">Frozen</span></div>
       </div>
       <div class="arrow"><i></i></div>
       <div class="pipe-card">
         <span class="pipe-badge">STEP 04</span>
         <h4>Evaluation</h4>
-        <p class="pd">Zero-shot, prompt matching, retrieval-like, few-shot prototype trên val và test.</p>
+        <p class="pd">Zero-shot bằng class-name prompts và few-shot classifier với 8/16/32 mẫu mỗi lớp.</p>
         <div class="pipe-tags"><span class="ptag o">Zero-shot</span><span class="ptag t">Prompt</span><span class="ptag b">Few-shot</span></div>
       </div>
       <div class="arrow"><i></i></div>
       <div class="pipe-card">
         <span class="pipe-badge">STEP 05</span>
         <h4>Analysis</h4>
-        <p class="pd">Robustness, calibration ECE, tốc độ suy luận và xuất CSV tóm tắt.</p>
-        <div class="pipe-tags"><span class="ptag g">Robust</span><span class="ptag t">Efficiency</span><span class="ptag o">ECE</span></div>
+        <p class="pd">Xuất model comparison, classification report, confusion matrix, predictions và plot report.</p>
+        <div class="pipe-tags"><span class="ptag g">Metrics</span><span class="ptag t">Plots</span><span class="ptag o">Artifacts</span></div>
       </div>
     </div></div>
   </div>
@@ -185,133 +203,122 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
 <!-- RESULTS -->
 <section id="results"><div class="ctr">
   <h2 class="stitle">Kết quả thí nghiệm</h2>
-  <p class="sdesc">Tất cả số liệu khớp nội dung file CSV trong thư mục Train Result. Accuracy và F1 hiển thị dạng phần trăm.</p>
+  <p class="sdesc">Số liệu lấy từ <code>outputs/model_comparison.csv</code>, <code>outputs/dataset_summary.csv</code>, <code>outputs/keyword_filter_summary.csv</code> và report theo từng mô hình. Accuracy, recall, precision và F1 hiển thị dạng phần trăm.</p>
 
-  <!-- 1. Label audit -->
+  <!-- 1. Dataset audit -->
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">1. Kiểm định nhãn</h3>
+    <h3 class="sub" style="margin-top:0">1. Dataset sau keyword filter</h3>
     <div class="tw"><table>
-      <thead><tr><th>Split</th><th class="n">Tổng</th><th class="n">Clean</th><th class="n">Ambiguous</th><th class="n">Unmatched</th><th class="n">Missing img</th></tr></thead>
+      <thead><tr><th>Split</th><th class="n">Rows trước filter</th><th class="n">Rows sau keyword</th><th class="n">Rows sau ảnh + class</th><th class="n">Keep rate</th><th class="n">Mean caption len</th></tr></thead>
       <tbody>
-        <tr><td>train</td><td class="n">65 448</td><td class="n">37 042</td><td class="n">811</td><td class="n">27 595</td><td class="n">28</td></tr>
-        <tr><td>val</td><td class="n">8 180</td><td class="n">4 561</td><td class="n">99</td><td class="n">3 520</td><td class="n">5</td></tr>
-        <tr><td>test</td><td class="n">8 179</td><td class="n">4 668</td><td class="n">98</td><td class="n">3 413</td><td class="n">3</td></tr>
+        <tr><td>train</td><td class="n">65 448</td><td class="n">38 092</td><td class="n">38 072</td><td class="n">58,20%</td><td class="n">140,68</td></tr>
+        <tr><td>val</td><td class="n">8 180</td><td class="n">4 752</td><td class="n">4 749</td><td class="n">58,09%</td><td class="n">139,90</td></tr>
+        <tr><td>test</td><td class="n">8 179</td><td class="n">4 820</td><td class="n">4 818</td><td class="n">58,93%</td><td class="n">143,94</td></tr>
       </tbody>
     </table></div>
     <div class="cw"><canvas id="chAudit"></canvas></div>
   </div>
 
-  <!-- 2. Selected classes -->
+  <!-- 2. Class distribution -->
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">2. Lớp được chọn</h3>
+    <h3 class="sub" style="margin-top:0">2. Phân bố lớp</h3>
     <div class="tw"><table>
-      <thead><tr><th>class_name</th><th>display_name</th><th>prompt_phrase</th></tr></thead>
+      <thead><tr><th>Lớp</th><th class="n">Train</th><th class="n">Val</th><th class="n">Test</th><th>Keyword gợi ý</th></tr></thead>
       <tbody>
-        <tr><td>ct</td><td>CT</td><td>a CT radiology scan</td></tr>
-        <tr><td>xray</td><td>X-ray</td><td>an X-ray radiograph</td></tr>
-        <tr><td>mri</td><td>MRI</td><td>an MRI radiology image</td></tr>
-        <tr><td>ultrasound</td><td>Ultrasound</td><td>an ultrasound medical image</td></tr>
-        <tr><td>angiography</td><td>Angiography</td><td>an angiography or vascular radiology image</td></tr>
-        <tr><td>fluoroscopy</td><td>Fluoroscopy</td><td>a fluoroscopy medical image</td></tr>
+        <tr><td>ct</td><td class="n">16 623</td><td class="n">2 051</td><td class="n">2 103</td><td>ct, tomography, computed tomography</td></tr>
+        <tr><td>xray_radiograph</td><td class="n">10 963</td><td class="n">1 378</td><td class="n">1 371</td><td>xray, x-ray, radiograph, radiographic</td></tr>
+        <tr><td>mri</td><td class="n">6 384</td><td class="n">832</td><td class="n">802</td><td>mri, magnetic, resonance</td></tr>
+        <tr><td>ultrasound</td><td class="n">2 241</td><td class="n">250</td><td class="n">296</td><td>ultrasound, sonograph, sonography</td></tr>
+        <tr><td>angiography</td><td class="n">1 861</td><td class="n">238</td><td class="n">246</td><td>angiography, angiogram, arteriography</td></tr>
       </tbody>
     </table></div>
+    <div class="cw"><canvas id="chClassDist"></canvas></div>
   </div>
 
   <!-- 3. Comparison -->
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">3. So sánh các phương pháp trên test</h3>
+    <h3 class="sub" style="margin-top:0">3. So sánh mô hình trên test</h3>
     <div class="tw"><table>
-      <thead><tr><th>Phương pháp</th><th>Nhóm</th><th class="n">Accuracy</th><th class="n">Macro F1</th></tr></thead>
+      <thead><tr><th>Model</th><th>Mode</th><th class="n">Shots</th><th class="n">Accuracy</th><th class="n">Balanced Acc</th><th class="n">Precision macro</th><th class="n">Recall macro</th><th class="n">F1 macro</th></tr></thead>
       <tbody>
-        <tr><td>Zero-shot image-only — global</td><td>zero_shot</td><td class="n">87,81%</td><td class="n">76,62%</td></tr>
-        <tr><td>Zero-shot image-only — global+local</td><td>zero_shot</td><td class="n">87,83%</td><td class="n">76,42%</td></tr>
-        <tr><td>Text-only prompt matching</td><td>text_ablation</td><td class="n">97,99%</td><td class="n">96,48%</td></tr>
-        <tr><td>Image+text prompt — global</td><td>retrieval</td><td class="n">96,91%</td><td class="n">92,75%</td></tr>
-        <tr><td>Image+text prompt — global+local</td><td>retrieval</td><td class="n">96,89%</td><td class="n">92,55%</td></tr>
-        <tr><td>Few-shot text-only — k=64</td><td>few_shot</td><td class="n">93,72%</td><td class="n">86,04%</td></tr>
-        <tr><td>Few-shot image+text — k=64</td><td>few_shot</td><td class="n">92,84%</td><td class="n">84,53%</td></tr>
-        <tr><td>Few-shot image-only — k=64</td><td>few_shot</td><td class="n">81,83%</td><td class="n">71,04%</td></tr>
+        <tr><td>CLIP-ViT-B/32</td><td>Zero-shot classification</td><td class="n">0</td><td class="n">93,59%</td><td class="n">94,89%</td><td class="n">89,40%</td><td class="n">94,89%</td><td class="n">91,39%</td></tr>
+        <tr><td>OpenCLIP-ResNet50</td><td>Zero-shot classification</td><td class="n">0</td><td class="n">92,86%</td><td class="n best">95,63%</td><td class="n">87,38%</td><td class="n best">95,63%</td><td class="n">90,43%</td></tr>
+        <tr><td>CLIP-ViT-B/32</td><td>Few-shot classification</td><td class="n">8</td><td class="n">73,33%</td><td class="n">72,57%</td><td class="n">74,08%</td><td class="n">72,57%</td><td class="n">72,55%</td></tr>
+        <tr><td>OpenCLIP-ResNet50</td><td>Few-shot classification</td><td class="n">8</td><td class="n">77,19%</td><td class="n">77,86%</td><td class="n">77,30%</td><td class="n">77,86%</td><td class="n">76,61%</td></tr>
+        <tr><td>CLIP-ViT-B/32</td><td>Few-shot classification</td><td class="n">32</td><td class="n">92,20%</td><td class="n">94,13%</td><td class="n">89,99%</td><td class="n">94,13%</td><td class="n">91,85%</td></tr>
+        <tr><td>OpenCLIP-ResNet50</td><td>Few-shot classification</td><td class="n">32</td><td class="n best">93,88%</td><td class="n">95,16%</td><td class="n best">90,86%</td><td class="n">95,16%</td><td class="n best">92,85%</td></tr>
       </tbody>
     </table></div>
     <div class="cw"><canvas id="chComp"></canvas></div>
   </div>
 
-  <!-- 4. Prompt eval -->
+  <!-- 4. Shot trend -->
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">4. Đánh giá prompt chi tiết</h3>
-    <div class="tw"><table>
-      <thead><tr><th>Phương pháp</th><th class="n">Val Acc</th><th class="n">Val F1</th><th class="n">Test Acc</th><th class="n">Test F1</th></tr></thead>
-      <tbody>
-        <tr><td>ZS image — global+local</td><td class="n">87,74%</td><td class="n">77,63%</td><td class="n">87,83%</td><td class="n">76,42%</td></tr>
-        <tr><td>ZS image — global</td><td class="n">87,76%</td><td class="n">77,58%</td><td class="n">87,81%</td><td class="n">76,62%</td></tr>
-        <tr><td>Text-only prompt</td><td class="n">97,81%</td><td class="n">96,20%</td><td class="n">97,99%</td><td class="n">96,48%</td></tr>
-        <tr><td>Img+txt prompt — global</td><td class="n">96,67%</td><td class="n">91,98%</td><td class="n">96,91%</td><td class="n">92,75%</td></tr>
-        <tr><td>Img+txt prompt — global+local</td><td class="n">96,67%</td><td class="n">91,98%</td><td class="n">96,89%</td><td class="n">92,55%</td></tr>
-      </tbody>
-    </table></div>
-  </div>
-
-  <!-- 5. Few-shot -->
-  <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">5. Few-shot accuracy theo k</h3>
+    <h3 class="sub" style="margin-top:0">4. Few-shot theo số shot</h3>
+    <p class="note">Bảng so sánh chính dùng các dòng có trong <code>docs/plot/model_comparison.json</code>: zero-shot, 8-shot và 32-shot. <code>artifact_manifest.csv</code> cũng liệt kê thêm artifact 16-shot nếu cần mở rộng.</p>
     <div class="cw"><canvas id="chFS"></canvas></div>
   </div>
 
-  <!-- 6. Few-shot best -->
+  <!-- 5. Best model per class -->
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">6. Few-shot tốt nhất theo chế độ</h3>
+    <h3 class="sub" style="margin-top:0">5. Best model: OpenCLIP-ResNet50 32-shot</h3>
     <div class="tw"><table>
-      <thead><tr><th>Phương pháp</th><th>Embedding</th><th class="n">best k</th><th class="n">Test Acc</th><th class="n">Test F1</th></tr></thead>
+      <thead><tr><th>Lớp</th><th class="n">Precision</th><th class="n">Recall</th><th class="n">F1</th><th class="n">Support</th></tr></thead>
       <tbody>
-        <tr><td>Text-only</td><td>text_emb</td><td class="n">64</td><td class="n">93,72%</td><td class="n">86,04%</td></tr>
-        <tr><td>Image+text</td><td>multimodal_emb</td><td class="n">64</td><td class="n">92,84%</td><td class="n">84,53%</td></tr>
-        <tr><td>Image-only</td><td>image_emb</td><td class="n">64</td><td class="n">81,83%</td><td class="n">71,04%</td></tr>
+        <tr><td>ct</td><td class="n">97,36%</td><td class="n">91,06%</td><td class="n">94,10%</td><td class="n">2 103</td></tr>
+        <tr><td>xray_radiograph</td><td class="n">95,85%</td><td class="n">96,13%</td><td class="n">95,99%</td><td class="n">1 371</td></tr>
+        <tr><td>mri</td><td class="n">87,74%</td><td class="n">95,51%</td><td class="n">91,46%</td><td class="n">802</td></tr>
+        <tr><td>ultrasound</td><td class="n">89,78%</td><td class="n">97,97%</td><td class="n">93,70%</td><td class="n">296</td></tr>
+        <tr><td>angiography</td><td class="n">83,57%</td><td class="n">95,12%</td><td class="n">88,97%</td><td class="n">246</td></tr>
+        <tr><td><strong>macro avg</strong></td><td class="n">90,86%</td><td class="n">95,16%</td><td class="n">92,85%</td><td class="n">4 818</td></tr>
       </tbody>
     </table></div>
   </div>
 
-  <!-- 7. Robustness -->
+  <!-- 6. Confusion matrix -->
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">7. Robustness</h3>
+    <h3 class="sub" style="margin-top:0">6. Confusion matrix — OpenCLIP-ResNet50 32-shot</h3>
     <div class="tw"><table>
-      <thead><tr><th>Điều kiện</th><th class="n">ZS image</th><th class="n">Retrieval</th><th class="n">FS image</th><th class="n">FS img+txt</th></tr></thead>
+      <thead><tr><th>True \ Pred</th><th class="n">ct</th><th class="n">xray</th><th class="n">mri</th><th class="n">ultrasound</th><th class="n">angiography</th></tr></thead>
       <tbody>
-        <tr><td>Clean</td><td class="n">87,83%</td><td class="n">96,91%</td><td class="n">81,83%</td><td class="n">92,84%</td></tr>
-        <tr><td>Gaussian noise</td><td class="n">75,55%</td><td class="n">95,18%</td><td class="n">68,37%</td><td class="n">87,33%</td></tr>
-        <tr><td>Gaussian blur</td><td class="n">83,48%</td><td class="n">96,94%</td><td class="n">78,80%</td><td class="n">93,14%</td></tr>
+        <tr><td>ct</td><td class="n best">1 915</td><td class="n">47</td><td class="n">94</td><td class="n">19</td><td class="n">28</td></tr>
+        <tr><td>xray_radiograph</td><td class="n">25</td><td class="n best">1 318</td><td class="n">11</td><td class="n">7</td><td class="n">10</td></tr>
+        <tr><td>mri</td><td class="n">19</td><td class="n">8</td><td class="n best">766</td><td class="n">4</td><td class="n">5</td></tr>
+        <tr><td>ultrasound</td><td class="n">2</td><td class="n">0</td><td class="n">1</td><td class="n best">290</td><td class="n">3</td></tr>
+        <tr><td>angiography</td><td class="n">6</td><td class="n">2</td><td class="n">1</td><td class="n">3</td><td class="n best">234</td></tr>
       </tbody>
     </table></div>
-    <div class="cw"><canvas id="chRobust"></canvas></div>
+    <div class="cw"><canvas id="chCM"></canvas></div>
   </div>
 
-  <!-- 8. Efficiency -->
+  <!-- 7. Efficiency -->
   <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">8. Hiệu năng</h3>
+    <h3 class="sub" style="margin-top:0">7. Hiệu năng và artifact</h3>
     <div class="tw"><table>
-      <thead><tr><th>Model</th><th class="n">Params</th><th class="n">Samples</th><th class="n">Time s</th><th class="n">s/sample</th><th class="n">Best ZS Acc</th><th class="n">Best Retrieval Acc</th></tr></thead>
-      <tbody><tr><td>ViT + CLIP + OT</td><td class="n">10.7M</td><td class="n">640</td><td class="n">3.45</td><td class="n">0.0054</td><td class="n">87,83%</td><td class="n">96,91%</td></tr></tbody>
-    </table></div>
-  </div>
-
-  <!-- 9. Calibration -->
-  <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">9. Calibration ECE</h3>
-    <div class="tw"><table>
-      <thead><tr><th>Phương pháp</th><th class="n">ECE ↓</th></tr></thead>
+      <thead><tr><th>Model</th><th>Mode</th><th class="n">Shots</th><th class="n">Eval samples</th><th class="n">Time / sample</th><th class="n">Trainable params</th><th>Output chính</th></tr></thead>
       <tbody>
-        <tr><td>Few-shot image-only k=64</td><td class="n">0.563</td></tr>
-        <tr><td>Zero-shot image — global+local</td><td class="n">0.670</td></tr>
-        <tr><td>Image+text prompt — global</td><td class="n">0.730</td></tr>
+        <tr><td>CLIP-ViT-B/32</td><td>Zero-shot</td><td class="n">0</td><td class="n">4 818</td><td class="n">0,000026 ms</td><td class="n">0</td><td>classification_report_clip_vit_b_32_0shot.csv</td></tr>
+        <tr><td>OpenCLIP-ResNet50</td><td>Zero-shot</td><td class="n">0</td><td class="n">4 818</td><td class="n">0,000060 ms</td><td class="n">0</td><td>classification_report_openclip_resnet50_0shot.csv</td></tr>
+        <tr><td>CLIP-ViT-B/32</td><td>Few-shot</td><td class="n">32</td><td class="n">4 818</td><td class="n">0,002342 ms</td><td class="n">1 285</td><td>classifier_clip_vit_b_32_32shot.pkl</td></tr>
+        <tr><td>OpenCLIP-ResNet50</td><td>Few-shot</td><td class="n">32</td><td class="n">4 818</td><td class="n">0,002410 ms</td><td class="n">1 285</td><td>classifier_openclip_resnet50_32shot.pkl</td></tr>
       </tbody>
     </table></div>
-    <div class="cw"><canvas id="chECE"></canvas></div>
+    <div class="cw"><canvas id="chSpeed"></canvas></div>
   </div>
 
-  <!-- 10. Pretrain -->
-  <div class="glass" style="padding:24px;margin-bottom:18px">
-    <h3 class="sub" style="margin-top:0">10. Lịch sử pretrain — 50 epoch</h3>
-    <p class="sdesc" style="margin-top:0">Loss giảm từ 4.61 xuống 1.80. Val zero-shot accuracy cuối ≈ 85,8%.</p>
-    <div class="cw"><canvas id="chPretrain"></canvas></div>
+  <!-- 8. Docs plots -->
+  <div class="glass" id="plots" style="padding:24px;margin-bottom:18px">
+    <h3 class="sub" style="margin-top:0">8. Plot trong docs mới</h3>
+    <p class="sdesc" style="margin-top:0">Các ảnh dưới đây trỏ tới artifact được liệt kê trong <code>outputs/artifact_manifest.csv</code>. Nếu chạy ngoài workspace, cần giữ nguyên thư mục <code>docs/plot/</code> cạnh file HTML.</p>
+    <div class="plot-grid">
+      <div class="plot-card"><img src="docs/plot/accuracy_comparison.png" alt="Accuracy comparison"><div class="pcap">Accuracy comparison</div></div>
+      <div class="plot-card"><img src="docs/plot/f1_macro_comparison.png" alt="F1 macro comparison"><div class="pcap">F1 macro comparison</div></div>
+      <div class="plot-card"><img src="docs/plot/classification_metrics_comparison.png" alt="Classification metrics comparison"><div class="pcap">Classification metrics comparison</div></div>
+      <div class="plot-card"><img src="docs/plot/confusion_matrix_best_openclip_resnet50_32shot.png" alt="Best model confusion matrix"><div class="pcap">Confusion matrix best model</div></div>
+      <div class="plot-card"><img src="docs/plot/eda_distribution.png" alt="EDA class distribution"><div class="pcap">EDA distribution</div></div>
+      <div class="plot-card"><img src="docs/plot/sample_pairs.png" alt="Sample image-caption pairs"><div class="pcap">Sample image-caption pairs</div></div>
+      <div class="plot-card"><img src="docs/plot/hard_cases_best_model.png" alt="Hard cases best model"><div class="pcap">Hard cases of best model</div></div>
+    </div>
   </div>
 
   <!-- HIGHLIGHTS -->
@@ -319,17 +326,17 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
     <div class="glass ccard">
       <div class="cnum">01</div>
       <h3>Điểm nổi bật</h3>
-      <p>Zero-shot ảnh thuần ~87,8%; ghép ảnh–văn bản retrieval-like ~96,9%. Few-shot text prototype ~93,7% với k=64.</p>
+      <p>CLIP-ViT-B/32 zero-shot đạt 93,59% accuracy; OpenCLIP-ResNet50 32-shot đạt tốt nhất với 93,88% accuracy và 92,85% F1 macro.</p>
     </div>
     <div class="glass ccard">
       <div class="cnum">02</div>
-      <h3>Robustness</h3>
-      <p>Nhiễu Gaussian giảm mạnh zero-shot; blur ảnh hưởng nhẹ hơn. Retrieval-like và multimodal few-shot ổn định nhất.</p>
+      <h3>Mất cân bằng lớp</h3>
+      <p>Test set bị lệch về CT và X-ray; vì vậy dashboard giữ balanced accuracy, recall macro và F1 macro bên cạnh accuracy.</p>
     </div>
     <div class="glass ccard">
       <div class="cnum">03</div>
-      <h3>Gợi ý</h3>
-      <p>Mở notebook để xem confusion matrix và ablation trực quan. CSV trong Train Result dùng cho phụ lục báo cáo.</p>
+      <h3>Artifact</h3>
+      <p>Các CSV trong <code>outputs/</code> và plot trong <code>docs/plot/</code> có thể dùng trực tiếp cho phụ lục hoặc Streamlit dashboard.</p>
     </div>
   </div>
 </div></section>
@@ -337,82 +344,86 @@ footer{padding:32px 0 40px;color:var(--muted);text-align:center;font-size:.88rem
 
 </main>
 
-<footer><div class="ctr">© 2026 Nhóm BB01 · Báo cáo ROCO modality + OT</div></footer>
+<footer><div class="ctr">© 2026 Nhóm BB01 · ROCO Radiology multimodal classification</div></footer>
 
 <script>
 const G='rgba(255,255,255,.05)',T='#99a4c8';
 Chart.defaults.color=T;
 Chart.defaults.font.family='Inter,system-ui,sans-serif';
 
-/* 1 — Audit stacked */
+const pct=v=>`${v}%`;
+
+/* 1 — Keyword-filter audit */
 new Chart(document.getElementById('chAudit'),{type:'bar',data:{
   labels:['Train','Val','Test'],
   datasets:[
-    {label:'Clean',data:[37042,4561,4668],backgroundColor:'#5eead4'},
-    {label:'Ambiguous',data:[811,99,98],backgroundColor:'#f59e0b'},
-    {label:'Unmatched',data:[27595,3520,3413],backgroundColor:'#7c9cff'},
-    {label:'Missing',data:[28,5,3],backgroundColor:'#fb7185'}
+    {label:'Before keyword filter',data:[65448,8180,8179],backgroundColor:'#7c9cff'},
+    {label:'After keyword + image/class filter',data:[38072,4749,4818],backgroundColor:'#5eead4'}
   ]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,padding:12}}},
-  scales:{x:{stacked:true,grid:{color:G}},y:{stacked:true,grid:{color:G},ticks:{callback:v=>v.toLocaleString()}}}}
+  scales:{x:{grid:{color:G}},y:{grid:{color:G},ticks:{callback:v=>v.toLocaleString()}}}}
+});
+
+/* 2 — Class distribution */
+new Chart(document.getElementById('chClassDist'),{type:'bar',data:{
+  labels:['ct','xray','mri','ultrasound','angiography'],
+  datasets:[
+    {label:'Train',data:[16623,10963,6384,2241,1861],backgroundColor:'#7c9cff'},
+    {label:'Val',data:[2051,1378,832,250,238],backgroundColor:'#f59e0b'},
+    {label:'Test',data:[2103,1371,802,296,246],backgroundColor:'#5eead4'}
+  ]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,padding:12}}},
+  scales:{x:{grid:{color:G}},y:{grid:{color:G},ticks:{callback:v=>v.toLocaleString()}}}}
 });
 
 /* 3 — Comparison bar */
 new Chart(document.getElementById('chComp'),{type:'bar',data:{
-  labels:['ZS img g','ZS img g+l','Text prompt','Img+txt g','Img+txt g+l','FS text','FS img+txt','FS img'],
+  labels:['CLIP ZS','OpenCLIP ZS','CLIP 8','OpenCLIP 8','CLIP 32','OpenCLIP 32'],
   datasets:[
-    {label:'Accuracy',data:[87.81,87.83,97.99,96.91,96.89,93.72,92.84,81.83],backgroundColor:'#5eead4'},
-    {label:'Macro F1',data:[76.62,76.42,96.48,92.75,92.55,86.04,84.53,71.04],backgroundColor:'#7c9cff'}
+    {label:'Accuracy',data:[93.59,92.86,73.33,77.19,92.20,93.88],backgroundColor:'#5eead4'},
+    {label:'F1 macro',data:[91.39,90.43,72.55,76.61,91.85,92.85],backgroundColor:'#7c9cff'}
   ]},options:{responsive:true,indexAxis:'y',plugins:{legend:{labels:{boxWidth:12,padding:12}}},
-  scales:{x:{min:50,max:100,grid:{color:G},ticks:{callback:v=>v+'%'}},y:{grid:{color:G}}}}
+  scales:{x:{min:65,max:100,grid:{color:G},ticks:{callback:pct}},y:{grid:{color:G}}}}
 });
 
-/* 5 — Few-shot line */
+/* 4 — Few-shot line */
 new Chart(document.getElementById('chFS'),{type:'line',data:{
-  labels:['1','2','4','8','16','32','64'],
+  labels:['0','8','32'],
   datasets:[
-    {label:'Image+text',data:[69.75,78.35,87.56,89.90,92.02,92.35,93.60],borderColor:'#9b8cff',backgroundColor:'rgba(155,140,255,.1)',tension:.35,pointRadius:5,fill:true},
-    {label:'Text-only',data:[70.74,81.50,87.63,90.53,92.68,93.57,94.85],borderColor:'#5eead4',backgroundColor:'rgba(94,234,212,.1)',tension:.35,pointRadius:5,fill:true},
-    {label:'Image-only',data:[58.01,62.11,74.96,77.52,80.86,80.88,82.03],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.1)',tension:.35,pointRadius:5,fill:true}
-  ]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,padding:12}},title:{display:true,text:'Test accuracy theo k-shot',color:'#eef2ff',font:{size:14,weight:'bold'}}},
-  scales:{x:{title:{display:true,text:'k',color:T},grid:{color:G}},y:{min:50,max:100,grid:{color:G},ticks:{callback:v=>v+'%'}}}}
+    {label:'CLIP-ViT-B/32 accuracy',data:[93.59,73.33,92.20],borderColor:'#5eead4',backgroundColor:'rgba(94,234,212,.1)',tension:.25,pointRadius:5,fill:true},
+    {label:'OpenCLIP-ResNet50 accuracy',data:[92.86,77.19,93.88],borderColor:'#9b8cff',backgroundColor:'rgba(155,140,255,.1)',tension:.25,pointRadius:5,fill:true},
+    {label:'CLIP-ViT-B/32 F1 macro',data:[91.39,72.55,91.85],borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.08)',tension:.25,pointRadius:5,fill:false},
+    {label:'OpenCLIP-ResNet50 F1 macro',data:[90.43,76.61,92.85],borderColor:'#fb7185',backgroundColor:'rgba(251,113,133,.08)',tension:.25,pointRadius:5,fill:false}
+  ]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,padding:12}},title:{display:true,text:'Zero-shot và few-shot theo output model_comparison',color:'#eef2ff',font:{size:14,weight:'bold'}}},
+  scales:{x:{title:{display:true,text:'Shots',color:T},grid:{color:G}},y:{min:65,max:100,grid:{color:G},ticks:{callback:pct}}}}
 });
 
-/* 7 — Robustness grouped */
-new Chart(document.getElementById('chRobust'),{type:'bar',data:{
-  labels:['Clean','Gaussian noise','Gaussian blur'],
-  datasets:[
-    {label:'ZS image',data:[87.83,75.55,83.48],backgroundColor:'#f59e0b'},
-    {label:'Retrieval',data:[96.91,95.18,96.94],backgroundColor:'#5eead4'},
-    {label:'FS image',data:[81.83,68.37,78.80],backgroundColor:'#fb7185'},
-    {label:'FS img+txt',data:[92.84,87.33,93.14],backgroundColor:'#7c9cff'}
-  ]},options:{responsive:true,plugins:{legend:{labels:{boxWidth:12,padding:12}}},
-  scales:{x:{grid:{color:G}},y:{min:50,max:100,grid:{color:G},ticks:{callback:v=>v+'%'}}}}
-});
-
-/* 9 — ECE */
-new Chart(document.getElementById('chECE'),{type:'bar',data:{
-  labels:['FS image k=64','ZS image g+l','Img+txt prompt'],
-  datasets:[{label:'ECE',data:[.5633,.6701,.7295],backgroundColor:['#5eead4','#7c9cff','#f59e0b'],borderRadius:6}]
-  },options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},
-  scales:{x:{min:0,max:1,grid:{color:G},title:{display:true,text:'ECE — thấp hơn tốt hơn',color:T}},y:{grid:{color:G}}}}
-});
-
-/* 10 — Pretrain dual axis */
-const ep=Array.from({length:50},(_,i)=>i+1);
-const loss=[4.607,4.218,3.979,3.825,3.683,3.572,3.494,3.389,3.326,3.271,3.202,3.155,3.094,3.038,2.998,2.933,2.892,2.856,2.815,2.766,2.722,2.682,2.649,2.598,2.574,2.528,2.482,2.463,2.432,2.397,2.354,2.311,2.291,2.264,2.237,2.189,2.184,2.135,2.090,2.088,2.057,2.026,1.983,1.961,1.936,1.912,1.882,1.855,1.833,1.797];
-const acc=[60.86,70.18,73.91,68.85,75.60,72.69,75.60,73.39,75.49,79.03,78.85,79.29,78.37,78.04,80.23,80.12,79.16,78.04,82.14,76.83,76.50,82.56,84.40,81.92,82.05,81.66,84.25,83.33,84.60,83.92,82.23,84.93,84.60,85.21,84.23,81.61,83.70,85.83,85.04,84.53,85.17,83.24,87.25,85.54,85.70,85.26,88.11,84.88,86.31,85.78];
-new Chart(document.getElementById('chPretrain'),{type:'line',data:{
-  labels:ep,
-  datasets:[
-    {label:'Total loss',data:loss,borderColor:'#fb7185',backgroundColor:'rgba(251,113,133,.06)',yAxisID:'y',tension:.3,pointRadius:0,borderWidth:2.5,fill:true},
-    {label:'Val ZS acc %',data:acc,borderColor:'#5eead4',backgroundColor:'rgba(94,234,212,.06)',yAxisID:'y1',tension:.3,pointRadius:0,borderWidth:2.5,fill:true}
-  ]},options:{responsive:true,interaction:{mode:'index',intersect:false},
-  plugins:{legend:{labels:{boxWidth:12,padding:12}},title:{display:true,text:'Loss và val accuracy qua 50 epoch',color:'#eef2ff',font:{size:14,weight:'bold'}}},
+/* 6 — Confusion matrix heatmap as bubble chart */
+const cmLabels=['ct','xray','mri','ultrasound','angio'];
+const cm=[
+  [1915,47,94,19,28],
+  [25,1318,11,7,10],
+  [19,8,766,4,5],
+  [2,0,1,290,3],
+  [6,2,1,3,234]
+];
+new Chart(document.getElementById('chCM'),{type:'bubble',data:{
+  datasets:cm.flatMap((row,y)=>row.map((v,x)=>({
+    label:`${cmLabels[y]} -> ${cmLabels[x]}`,
+    data:[{x,y,r:Math.max(4,Math.sqrt(v)*.35),value:v}],
+    backgroundColor:x===y?'rgba(94,234,212,.75)':'rgba(251,113,133,.45)'
+  })))
+},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.raw.value}`}}},
   scales:{
-    x:{title:{display:true,text:'Epoch',color:T},grid:{color:G},ticks:{maxTicksLimit:10}},
-    y:{position:'left',title:{display:true,text:'Loss',color:'#fb7185'},grid:{color:G},min:1,max:5},
-    y1:{position:'right',title:{display:true,text:'Acc %',color:'#5eead4'},grid:{drawOnChartArea:false},min:50,max:100,ticks:{callback:v=>v+'%'}}
+    x:{type:'linear',min:-.5,max:4.5,ticks:{stepSize:1,callback:v=>cmLabels[v]??''},title:{display:true,text:'Predicted label',color:T},grid:{color:G}},
+    y:{type:'linear',min:-.5,max:4.5,reverse:true,ticks:{stepSize:1,callback:v=>cmLabels[v]??''},title:{display:true,text:'True label',color:T},grid:{color:G}}
   }}
+});
+
+/* 7 — Timing */
+new Chart(document.getElementById('chSpeed'),{type:'bar',data:{
+  labels:['CLIP ZS','OpenCLIP ZS','CLIP 32','OpenCLIP 32'],
+  datasets:[{label:'time_per_sample_ms',data:[0.000026,0.000060,0.002342,0.002410],backgroundColor:['#5eead4','#7c9cff','#f59e0b','#fb7185'],borderRadius:6}]
+  },options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},
+  scales:{x:{grid:{color:G},title:{display:true,text:'milliseconds/sample',color:T}},y:{grid:{color:G}}}}
 });
 </script>
 </body>
